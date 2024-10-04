@@ -1,6 +1,6 @@
-import { Copy, Eye, GitFork, Plus, Search, Trash2, Users } from "lucide-react";
+import { Copy, Eye, GitFork, Search, Trash2, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // ================================================================================
 import {
   ColumnDef,
@@ -287,45 +287,45 @@ export default function Home() {
             <GitFork className="ml-2 h-5 w-5" />
           </Button>
           <h3 className="font-bold mb-2"> Recherche technicien</h3>
-          <Input className="mb-2" placeholder="Rechercher..." />
+          {/* <Input className="mb-2" placeholder="Rechercher..." /> */}
+          <Input
+            placeholder="Rechercher par e-mails..."
+            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("email")?.setFilterValue(event.target.value)
+            }
+            className="mb-2"
+          />
           <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
+          {/* <Link to="#"> */}
           <Button className="w-full" variant="outline">
-            Nouveau
+            Ajouter une technicien
           </Button>
+          {/* </Link> */}
         </aside>
         {/* main */}
         <main className="w-full flex-1 p-4">
-          <header className="bg-white shadow">
-            <div className="max-w-full py-4 px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                    <Users className="mr-2" /> Liste des techniciens
-                  </h1>
-                </div>
-                <div className="flex items-center space-x-2">
+          <div className="flex items-center py-2">
+            <header className="">
+              <div className="max-w-full  sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+                      <Users className="mr-2" /> Liste des techniciens
+                    </h1>
+                  </div>
+                  {/* <div className="flex items-center space-x-2">
                   <Link to="#">
                     <Button className="bg-sky-500 hover:bg-sky-600 text-white">
                       <Plus className="mr-1 h-4 w-4" /> Ajouter une technicien
                     </Button>
                   </Link>
+                </div> */}
                 </div>
               </div>
-            </div>
-          </header>
-          <div className="flex items-center py-4">
-            <Input
-              placeholder="Filtrer les e-mails..."
-              value={
-                (table.getColumn("email")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("email")?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
+            </header>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="ml-auto">
