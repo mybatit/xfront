@@ -27,6 +27,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -280,12 +287,35 @@ export default function Home() {
       <div className="flex flex-1">
         {/* aside */}
         <aside className="w-64 bg-gray-100 p-4">
-          <h2 className="font-bold mb-4">Agence</h2>
-          {/* <p className="mb-4">Efficient Technology</p> */}
-          <Button variant="outline" className="text-black mb-4 w-full">
+          <h2 className="text-lg font-semibold mb-2">Agence</h2>
+
+          <Button variant="outline" className="text-black mb-2 w-full">
             <span className="ml-2">Efficient Technology</span>
             <GitFork className="ml-2 h-5 w-5" />
           </Button>
+
+          <div>
+            <h3 className="mb-2 font-medium">Géolocalisation</h3>
+            <Select>
+              <SelectTrigger className="w-full mb-2 bg-white">
+                <SelectValue placeholder="Sélectionner" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="option1">Option 1</SelectItem>
+                <SelectItem value="option2">Option 2</SelectItem>
+                <SelectItem value="option3">Option 3</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <h3 className="mb-2 font-medium">Export</h3>
+            <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
+              Exporter
+            </Button>
+          </div>
+          {/* <p className="mb-4">Efficient Technology</p> */}
+
           <h3 className="font-bold mb-2"> Recherche technicien</h3>
           {/* <Input className="mb-2" placeholder="Rechercher..." /> */}
           <Input
@@ -294,7 +324,7 @@ export default function Home() {
             onChange={(event) =>
               table.getColumn("email")?.setFilterValue(event.target.value)
             }
-            className="mb-2"
+            className="mb-2 bg-white"
           />
           <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
             <Search className="mr-2 h-4 w-4" /> Rechercher

@@ -20,7 +20,15 @@ const Header = () => {
       <header className=" p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold">praxedo</h1>
+          <Link to="/">
+          <img
+            src="/Vengo-reserve.png"
+            alt="Praxedo Logo"
+            width={200}
+            height={50}
+            className="h-10"
+          />
+        </Link>
             <Input className="w-64" placeholder="Search..." />
             <Button variant="default" className="bg-sky-500 hover:bg-sky-600">
               <Search />
