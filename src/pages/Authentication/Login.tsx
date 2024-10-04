@@ -23,7 +23,7 @@ export default function SignUpPage() {
     try {
       // API call for login
       setLoading(true);
-      const response = await fetch("http://sajadevapi.batit.site/api/login", {
+      const response = await fetch("http://xapi.vengoreserve.com/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
