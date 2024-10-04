@@ -1,4 +1,4 @@
-import { GitFork, Plus, Search, Users } from "lucide-react";
+import { Copy, Eye, GitFork, Plus, Search, Trash2, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // ================================================================================
@@ -36,6 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Loader from "@/components/ui/Elements/Loader";
 export interface User {
   id: number;
   name: string;
@@ -57,6 +58,22 @@ export interface User {
   restored_: number;
   restored_by: string | null;
   profile_photo_url: string;
+}
+
+function convertDateFormat(dateString: string): string {
+  const date = new Date(dateString);
+
+  // Récupérer les différentes parties de la date
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Les mois sont indexés à partir de 0
+  const year = date.getFullYear();
+
+  // Récupérer l'heure et les minutes
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  // Retourner le format souhaité
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
 const columns: ColumnDef<User>[] = [
@@ -97,19 +114,23 @@ const columns: ColumnDef<User>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        created_at
+        Créé_à
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+    cell: ({ getValue }) => {
+      const dateStr = getValue<string>();
+      return convertDateFormat(dateStr);
+    },
   },
   {
-    accessorKey: "account_id",
+    accessorKey: "account_name",
     header: ({ column }) => (
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        account_id
+        Nom du compte
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
@@ -132,15 +153,24 @@ const columns: ColumnDef<User>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(payment.id.toString())
-              } // Convert id to string
+              onClick={
+                () => navigator.clipboard.writeText(payment.email)
+                // navigator.clipboard.writeText(payment.id.toString())
+                // Convert id to string
+              }
             >
-              Copy payment ID
+              <Copy className="mr-2 h-4 w-4" />
+              Copier l'e-mail
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Eye className="mr-2 h-4 w-4" />
+              View details
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash2 className="mr-2 h-4 w-4" />
+              supprimer
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -161,29 +191,27 @@ export default function Home() {
     // Check for token in local storage
     const token = localStorage.getItem("token");
     if (token) {
-      
       try {
         settoken(token);
         // Deserialize the JWT token
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
         // Set user information based on decoded token
         console.log("Decoded Token:", decodedToken);
-        setDecodedToken(decodedToken); 
+        setDecodedToken(decodedToken);
       } catch (error) {
         console.error("Error decoding token:", error);
         // Handle token decoding errors (e.g., invalid token)
         localStorage.removeItem("token"); // Clear invalid token
       }
-    }else{
+    } else {
       navigate("/login");
     }
     setLoading(false); // Set loading to false after checking token
   }, [navigate]);
 
-
-console.log("data user Decoded",decodedToken );
-console.log("token",token );
+  console.log("data user Decoded", decodedToken);
+  // console.log("token", token);
   useEffect(() => {
     setLoading(true);
     // setError(null);
@@ -204,11 +232,12 @@ console.log("token",token );
         }
 
         const data = await response.json();
-        console.log("data :", data.users);
-
-        setUsers(data.users); // Update state with fetched data
-        // setError(null);
-        setLoading(false);
+        // console.log("data :", data.users);
+        if (data.users) {
+          setUsers(data.users); // Update state with fetched data
+          // setError(null);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching users:", error);
         // setError("Failed to load users. Please try again later.");
@@ -246,7 +275,7 @@ console.log("token",token );
     },
   });
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col max-h-screen ">
       {/* main Content */}
       <div className="flex flex-1">
         {/* aside */}
@@ -269,7 +298,7 @@ console.log("token",token );
         {/* main */}
         <main className="w-full flex-1 p-4">
           <header className="bg-white shadow">
-            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-full py-4 px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900 flex items-center">
@@ -288,7 +317,7 @@ console.log("token",token );
           </header>
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter emails..."
+              placeholder="Filtrer les e-mails..."
               value={
                 (table.getColumn("email")?.getFilterValue() as string) ?? ""
               }
@@ -308,6 +337,16 @@ console.log("token",token );
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
                   .map((column) => {
+                    // Check for each specific column id and assign the proper label
+                    const columnLabel =
+                      column.id === "name"
+                        ? "Nom"
+                        : column.id === "created_at"
+                        ? "Créé_à"
+                        : column.id === "account_name"
+                        ? "Nom du compte"
+                        : column.id;
+
                     return (
                       <DropdownMenuCheckboxItem
                         key={column.id}
@@ -317,7 +356,7 @@ console.log("token",token );
                           column.toggleVisibility(!!value)
                         }
                       >
-                        {column.id}
+                        {columnLabel}
                       </DropdownMenuCheckboxItem>
                     );
                   })}
@@ -326,58 +365,66 @@ console.log("token",token );
           </div>
           <div className="rounded-md border">
             {/* {error && <div className="text-red-500">{error}</div>} */}
-            {loading ? (
-              <div>Loading...</div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <TableHead key={header.id}>
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                          </TableHead>
-                        );
-                      })}
+            {/* {loading ? (
+              <Loader/>
+            ) : ( */}
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 flex items-center justify-center"
+                    >
+                      <Loader />
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
                     </TableRow>
-                  ))}
-                </TableHeader>
-                <TableBody>
-                  {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={columns.length}
-                        className="h-24 text-center"
-                      >
-                        No results.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            )}
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
           <div className="flex items-center justify-end space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
@@ -409,7 +456,6 @@ console.log("token",token );
     </div>
   );
 }
-
 
 // {user.profile_photo_url === "" ? (
 //   <span>No Photo</span>
