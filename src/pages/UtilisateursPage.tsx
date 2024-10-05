@@ -330,7 +330,7 @@ export default function UtilisateursPage() {
             </Select>
           </div> */}
 
-          <h3 className="font-bold mb-2">Recherche technicien</h3>
+          <h3 className="font-bold mb-2">Recherche utilisateur</h3>
           <Input
             placeholder="Rechercher par e-mails..."
             value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -359,7 +359,7 @@ export default function UtilisateursPage() {
           <div className="flex flex-col lg:flex-row items-center py-2">
             <header className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                <Users className="mr-2" /> Liste des techniciens
+                <Users className="mr-2" /> Utilisateurs
               </h1>
             </header>
             <DropdownMenu>
