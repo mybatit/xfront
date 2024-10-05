@@ -279,7 +279,7 @@ export default function Home() {
       columnFilters,
       columnVisibility,
       rowSelection,
-    },
+    }
   });
   return (
     <div className="flex flex-col max-h-screen ">
@@ -394,10 +394,6 @@ export default function Home() {
             </DropdownMenu>
           </div>
           <div className="rounded-md border">
-            {/* {error && <div className="text-red-500">{error}</div>} */}
-            {/* {loading ? (
-              <Loader/>
-            ) : ( */}
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -449,7 +445,7 @@ export default function Home() {
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      No results.
+                      Aucun utilisateur trouvé.
                     </TableCell>
                   </TableRow>
                 )}
@@ -468,7 +464,7 @@ export default function Home() {
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
               >
-                Previous
+                Précédent
               </Button>
               <Button
                 variant="outline"
@@ -476,7 +472,7 @@ export default function Home() {
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
               >
-                Next
+                Suivant
               </Button>
             </div>
           </div>
