@@ -113,31 +113,14 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          
         </div>
       </header>
 
       {/* Mobile Menu Collapse */}
-      <nav className={`md:hidden ${menuOpen ? 'block' : 'hidden'} bg-[#003049] text-white `}>
-        {/* <Link to="#" className="block hover:bg-sky-600 p-4">
+      <nav className={`md:hidden ${menuOpen ? 'block' : 'hidden'} bg-[#003049] text-white`}>
+        <Link to="#" className="block hover:bg-sky-600 p-4">
           Synthèse
-        </Link> */}
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-        <Link to="#" >
-            
-            <Button
-              variant="outline"
-              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
-            >
-              Synthèse
-            </Button>
         </Link>
-
-          </DropdownMenuTrigger>
-        </DropdownMenu>
-        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -177,67 +160,23 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* <Link to="#" className="block hover:bg-sky-600 p-4">
+        <Link to="#" className="block hover:bg-sky-600 p-4">
           Vehicules <ChevronDown className="ml-2 h-4 w-4" />
-        </Link> */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
-            >
-              Vehicules <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-[#003049] text-white">
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Link to="#">....</Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        {/* <Link to="#" className="block hover:bg-sky-600 p-4">
+        </Link>
+        <Link to="#" className="block hover:bg-sky-600 p-4">
           Paramètres <ChevronDown className="ml-2 h-4 w-4" />
-        </Link> */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
-            >
-              Paramètres <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-[#003049] text-white">
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Link to="#">....</Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        </Link>
       </nav>
 
       {/* Desktop Navbar */}
       <nav className="hidden md:flex justify-between items-center bg-[#003049] text-white">
         <div className="flex items-center space-x-4">
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-            <Link to="#">
-              <Button variant="outline" className="bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white">
-              Synthèse 
-              </Button>
-          </Link>
-            </DropdownMenuTrigger>
-          </DropdownMenu>
-          {/* <Link to="#" className="hover:bg-sky-600 p-4">
+          <Link to="#" className="hover:bg-sky-600 p-4">
             Synthèse
-          </Link> */}
-          
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="  bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white">
+              <Button variant="outline" className="bg-transparent border-none hover:bg-sky-600 p-4">
                 Administration <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -270,40 +209,12 @@ const Header = () => {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <Link to="#" className="hover:bg-sky-600 p-4">
+          <Link to="#" className="hover:bg-sky-600 p-4">
             Vehicules <ChevronDown className="ml-2 h-4 w-4" />
-          </Link> */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white">
-              Vehicules <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-[#003049] text-white">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link to="#"></Link>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {/* <Link to="#" className="hover:bg-sky-600 p-4">
+          </Link>
+          <Link to="#" className="hover:bg-sky-600 p-4">
             Paramètres <ChevronDown className="ml-2 h-4 w-4" />
-          </Link> */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white">
-              Paramètres <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-[#003049] text-white">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link to="#"></Link>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          </Link>
         </div>
       </nav>
     </>

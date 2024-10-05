@@ -185,22 +185,19 @@ const columns: ColumnDef<User>[] = [
   },
 ];
 
-
-
-
 // Define pagination state shapes
 export type PaginationState = {
-  pageIndex: number
-  pageSize: number
-}
+  pageIndex: number;
+  pageSize: number;
+};
 
 export type PaginationTableState = {
-  pagination: PaginationState
-}
+  pagination: PaginationState;
+};
 
 export type PaginationInitialTableState = {
-  pagination?: Partial<PaginationState>
-}
+  pagination?: Partial<PaginationState>;
+};
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   // const [error, setError] = useState<string | null>(null);
@@ -279,15 +276,11 @@ export default function Home() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-
-
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page
-    pageSize: 8,  // Default page size
-  })
-
-
+    pageSize: 8, // Default page size
+  });
 
   const table = useReactTable({
     data: users,
@@ -307,21 +300,15 @@ export default function Home() {
       columnVisibility,
       rowSelection,
       pagination, // Include pagination state
-    }
+    },
   });
 
-
-
-
-
-
-  
   return (
-    <div className="flex flex-col max-h-screen ">
-      {/* main Content */}
-      <div className="flex flex-1">
+    <div className="flex flex-col ">
+      {/* Main Content */}
+      <div className="flex flex-1 flex-col lg:flex-row">
         {/* aside */}
-        <aside className="w-64 bg-gray-100 p-4">
+        <aside className="w-full lg:w-64 bg-gray-100 p-4">
           <h2 className="text-lg font-semibold mb-2">Agence</h2>
 
           <Button variant="outline" className="text-black mb-2 w-full">
@@ -349,10 +336,8 @@ export default function Home() {
               Exporter
             </Button>
           </div>
-          {/* <p className="mb-4">Efficient Technology</p> */}
 
-          <h3 className="font-bold mb-2"> Recherche technicien</h3>
-          {/* <Input className="mb-2" placeholder="Rechercher..." /> */}
+          <h3 className="font-bold mb-2">Recherche technicien</h3>
           <Input
             placeholder="Rechercher par e-mails..."
             value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -364,32 +349,18 @@ export default function Home() {
           <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
-          {/* <Link to="#"> */}
           <Button className="w-full" variant="outline">
             Ajouter une technicien
           </Button>
-          {/* </Link> */}
         </aside>
-        {/* main */}
+
+        {/* Main */}
         <main className="w-full flex-1 p-4">
-          <div className="flex items-center py-2">
-            <header className="">
-              <div className="max-w-full  sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                      <Users className="mr-2" /> Liste des techniciens
-                    </h1>
-                  </div>
-                  {/* <div className="flex items-center space-x-2">
-                  <Link to="#">
-                    <Button className="bg-sky-500 hover:bg-sky-600 text-white">
-                      <Plus className="mr-1 h-4 w-4" /> Ajouter une technicien
-                    </Button>
-                  </Link>
-                </div> */}
-                </div>
-              </div>
+          <div className="flex flex-col lg:flex-row items-center py-2">
+            <header className="flex-1">
+              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+                <Users className="mr-2" /> Liste des techniciens
+              </h1>
             </header>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -402,7 +373,6 @@ export default function Home() {
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
                   .map((column) => {
-                    // Check for each specific column id and assign the proper label
                     const columnLabel =
                       column.id === "name"
                         ? "Nom"
@@ -433,18 +403,16 @@ export default function Home() {
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
                   </TableRow>
                 ))}
               </TableHeader>
@@ -487,6 +455,7 @@ export default function Home() {
               </TableBody>
             </Table>
           </div>
+
           <div className="flex items-center justify-end space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
               {table.getFilteredSelectedRowModel().rows.length} of{" "}
@@ -512,7 +481,6 @@ export default function Home() {
             </div>
           </div>
         </main>
-        {/* footer */}
       </div>
     </div>
   );
