@@ -185,6 +185,22 @@ const columns: ColumnDef<User>[] = [
   },
 ];
 
+
+
+
+// Define pagination state shapes
+export type PaginationState = {
+  pageIndex: number
+  pageSize: number
+}
+
+export type PaginationTableState = {
+  pagination: PaginationState
+}
+
+export type PaginationInitialTableState = {
+  pagination?: Partial<PaginationState>
+}
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   // const [error, setError] = useState<string | null>(null);
@@ -263,11 +279,22 @@ export default function Home() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+
+
+  // Pagination state
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0, // Start at the first page
+    pageSize: 8,  // Default page size
+  })
+
+
+
   const table = useReactTable({
     data: users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination, // Handle pagination changes
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -279,8 +306,16 @@ export default function Home() {
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination, // Include pagination state
     }
   });
+
+
+
+
+
+
+  
   return (
     <div className="flex flex-col max-h-screen ">
       {/* main Content */}
