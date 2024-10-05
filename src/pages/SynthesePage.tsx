@@ -10,7 +10,7 @@ export default function SynthesePage() {
         </CardHeader>
         <CardContent>
           <div className="text-center space-y-4">
-            <Construction className="mx-auto h-16 w-16 text-yellow-500" />
+            <Construction className="mx-auto h-40 w-40 text-yellow-500" />
             <h2 className="text-xl font-semibold">Bienvenue aux utilisateurs</h2>
             <p className="text-gray-600">
               Cette page est en cours de développement.

@@ -222,7 +222,7 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">en cours de développement.</Link>
+                <Link to="#">En cours de développement.</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -240,7 +240,7 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">en cours de développement.</Link>
+                <Link to="#">En cours de développement.</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -262,15 +262,15 @@ const Header = () => {
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Link className="w-full h-full" to="#">comptes</Link>
+                <Link className="w-full h-full" to="#">Comptes</Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Link className="w-full h-full" to="#">roles</Link>
+                <Link className="w-full h-full" to="#">Roles</Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Link className="w-full h-full" to="#">priviliges</Link>
+                <Link className="w-full h-full" to="#">Priviliges</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -313,7 +313,7 @@ const Header = () => {
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link className="w-full h-full" to="#">type d'acttivities</Link>
+                <Link className="w-full h-full" to="#">Type d'acttivities</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -348,7 +348,7 @@ const Header = () => {
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">en cours de développement.</Link>
+                  <Link className="w-full h-full" to="#">En cours de développement.</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -366,7 +366,7 @@ const Header = () => {
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">en cours de développement.</Link>
+                  <Link className="w-full h-full" to="#">En cours de développement.</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -411,7 +411,7 @@ const Header = () => {
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">type d'acttivities</Link>
+                  <Link className="w-full h-full" to="#">Type d'acttivities</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -434,15 +434,15 @@ const Header = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">comptes</Link>
+                  <Link className="w-full h-full" to="#">Comptes</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">roles</Link>
+                  <Link className="w-full h-full" to="#">Roles</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">priviliges</Link>
+                  <Link className="w-full h-full" to="#">Priviliges</Link>
                 </DropdownMenuItem>
 
                 {/* <DropdownMenuItem>
