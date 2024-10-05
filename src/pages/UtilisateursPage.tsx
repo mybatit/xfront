@@ -198,7 +198,7 @@ export type PaginationTableState = {
 export type PaginationInitialTableState = {
   pagination?: Partial<PaginationState>;
 };
-export default function Home() {
+export default function UtilisateursPage() {
   const [users, setUsers] = useState<User[]>([]);
   // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);

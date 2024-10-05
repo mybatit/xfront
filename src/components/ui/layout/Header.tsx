@@ -33,7 +33,7 @@ const Header = () => {
       <header className="p-4 bg-white shadow-md">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link to="/">
+            <Link className="w-full h-full" to="/">
               <img
                 src="/Vengo-reserve.png"
                 alt="Praxedo Logo"
@@ -199,7 +199,7 @@ const Header = () => {
       >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Link to="#">
+            <Link className="w-full h-full" to="#">
               <Button
                 variant="outline"
                 className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
@@ -222,7 +222,7 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#"></Link>
+                <Link to="#">en cours de développement.</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -240,7 +240,7 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#"></Link>
+                <Link to="#">en cours de développement.</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -258,19 +258,19 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">Utilisateurs</Link>
+                <Link className="w-full h-full" to="/utilisateurs">Utilisateurs</Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Link to="#">comptes</Link>
+                <Link className="w-full h-full" to="#">comptes</Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Link to="#">roles</Link>
+                <Link className="w-full h-full" to="#">roles</Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Link to="#">priviliges</Link>
+                <Link className="w-full h-full" to="#">priviliges</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -288,32 +288,32 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">Referentiels</Link>
+                <Link className="w-full h-full" to="#">Referentiels</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">Formalirers</Link>
+                <Link className="w-full h-full" to="#">Formalirers</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">Types des reservations</Link>
+                <Link className="w-full h-full" to="#">Types des reservations</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">Types d'activities</Link>
+                <Link className="w-full h-full" to="#">Types d'activities</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">Etats de reservation</Link>
+                <Link className="w-full h-full" to="#">Etats de reservation</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">type d'acttivities</Link>
+                <Link className="w-full h-full" to="#">type d'acttivities</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -325,7 +325,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Link to="#">
+              <Link className="w-full h-full" to="#">
                 <Button
                   variant="outline"
                   className="bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white"
@@ -348,7 +348,7 @@ const Header = () => {
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#"></Link>
+                  <Link className="w-full h-full" to="#">en cours de développement.</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -366,7 +366,7 @@ const Header = () => {
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#"></Link>
+                  <Link className="w-full h-full" to="#">en cours de développement.</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -386,32 +386,32 @@ const Header = () => {
               {/* parametres (  Referentiels / Formalirers , types des  reservations types d'activities   / etats de reservation  / type d'acttivities  ) */}
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">Referentiels</Link>
+                  <Link className="w-full h-full" to="#">Referentiels</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">Formalirers</Link>
+                  <Link className="w-full h-full" to="#">Formalirers</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">Types des reservations</Link>
+                  <Link className="w-full h-full" to="#">Types des reservations</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">Types d'activities</Link>
+                  <Link className="w-full h-full" to="#">Types d'activities</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">Etats de reservation</Link>
+                  <Link className="w-full h-full" to="#">Etats de reservation</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">type d'acttivities</Link>
+                  <Link className="w-full h-full" to="#">type d'acttivities</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -430,35 +430,35 @@ const Header = () => {
               {/* ( users / accounts  / roles  /  priviliges... ) */}
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#">Utilisateurs</Link>
+                <Link className="w-full h-full" to="/utilisateurs">Utilisateurs</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link to="#">comptes</Link>
+                  <Link className="w-full h-full" to="#">comptes</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link to="#">roles</Link>
+                  <Link className="w-full h-full" to="#">roles</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link to="#">priviliges</Link>
+                  <Link className="w-full h-full" to="#">priviliges</Link>
                 </DropdownMenuItem>
 
                 {/* <DropdownMenuItem>
-                  <Link to="#">Creer Compte</Link>
+                  <Link className="w-full h-full" to="#">Creer Compte</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="#">Creer Utilisateur</Link>
+                  <Link className="w-full h-full" to="#">Creer Utilisateur</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="#">Creer role</Link>
+                  <Link className="w-full h-full" to="#">Creer role</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="#">Creer champ personalises</Link>
+                  <Link className="w-full h-full" to="#">Creer champ personalises</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="#">Lister champ personalises</Link>
+                  <Link className="w-full h-full" to="#">Lister champ personalises</Link>
                 </DropdownMenuItem> */}
               </DropdownMenuGroup>
             </DropdownMenuContent>
