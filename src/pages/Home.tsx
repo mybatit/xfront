@@ -1,4 +1,4 @@
-import { Copy, Eye, GitFork, Search, Trash2, Users } from "lucide-react";
+import { Copy, Eye, Search, Trash2, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // ================================================================================
@@ -27,13 +27,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -309,7 +309,7 @@ export default function Home() {
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* aside */}
         <aside className="w-full lg:w-64 bg-gray-100 p-4">
-          <h2 className="text-lg font-semibold mb-2">Agence</h2>
+          {/* <h2 className="text-lg font-semibold mb-2">Agence</h2>
 
           <Button variant="outline" className="text-black mb-2 w-full">
             <span className="ml-2">Efficient Technology</span>
@@ -328,14 +328,7 @@ export default function Home() {
                 <SelectItem value="option3">Option 3</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-
-          <div>
-            <h3 className="mb-2 font-medium">Export</h3>
-            <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
-              Exporter
-            </Button>
-          </div>
+          </div> */}
 
           <h3 className="font-bold mb-2">Recherche technicien</h3>
           <Input
@@ -350,8 +343,15 @@ export default function Home() {
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
           <Button className="w-full" variant="outline">
-            Ajouter une technicien
+            Nouveau
           </Button>
+
+          <div>
+            <h3 className="mb-2 font-medium">Export</h3>
+            <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
+              Exporter
+            </Button>
+          </div>
         </aside>
 
         {/* Main */}

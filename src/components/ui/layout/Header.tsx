@@ -197,10 +197,6 @@ const Header = () => {
           menuOpen ? "block" : "hidden"
         } bg-[#003049] text-white `}
       >
-        {/* <Link to="#" className="block hover:bg-sky-600 p-4">
-          Synthèse
-        </Link> */}
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Link to="#">
@@ -220,62 +216,66 @@ const Header = () => {
               variant="outline"
               className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
             >
-              Administration <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-[#003049] text-white">
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Link to="#">Creer Compte</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Liste des comptes</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Creer Utilisateur</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Liste des Utilisateurs</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Creer role</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Liste des roles</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Creer champ personalises</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="#">Lister champ personalises</Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* <Link to="#" className="block hover:bg-sky-600 p-4">
-          Vehicules <ChevronDown className="ml-2 h-4 w-4" />
-        </Link> */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
-            >
               Vehicules <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">....</Link>
+                <Link to="#"></Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-        {/* <Link to="#" className="block hover:bg-sky-600 p-4">
-          Paramètres <ChevronDown className="ml-2 h-4 w-4" />
-        </Link> */}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
+            >
+              Resrvations <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-[#003049] text-white">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#"></Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
+            >
+              Administration <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-[#003049] text-white">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#">Utilisateurs</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+                <Link to="#">comptes</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+                <Link to="#">roles</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+                <Link to="#">priviliges</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -288,7 +288,32 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">....</Link>
+                <Link to="#">Referentiels</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#">Formalirers</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#">Types des reservations</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#">Types d'activities</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#">Etats de reservation</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link to="#">type d'acttivities</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -310,51 +335,7 @@ const Header = () => {
               </Link>
             </DropdownMenuTrigger>
           </DropdownMenu>
-          {/* <Link to="#" className="hover:bg-sky-600 p-4">
-            Synthèse
-          </Link> */}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="  bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white"
-              >
-                Administration <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-[#003049] text-white">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link to="#">Creer Compte</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Liste des comptes</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Creer Utilisateur</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Liste des Utilisateurs</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Creer role</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Liste des roles</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Creer champ personalises</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="#">Lister champ personalises</Link>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {/* <Link to="#" className="hover:bg-sky-600 p-4">
-            Vehicules <ChevronDown className="ml-2 h-4 w-4" />
-          </Link> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -372,9 +353,26 @@ const Header = () => {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <Link to="#" className="hover:bg-sky-600 p-4">
-            Paramètres <ChevronDown className="ml-2 h-4 w-4" />
-          </Link> */}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white"
+              >
+                Resrvations <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-[#003049] text-white">
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#"></Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="flex items-center space-x-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -385,10 +383,83 @@ const Header = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-[#003049] text-white">
+              {/* parametres (  Referentiels / Formalirers , types des  reservations types d'activities   / etats de reservation  / type d'acttivities  ) */}
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link to="#"></Link>
+                  <Link to="#">Referentiels</Link>
                 </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#">Formalirers</Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#">Types des reservations</Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#">Types d'activities</Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#">Etats de reservation</Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#">type d'acttivities</Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="  bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white"
+              >
+                Administration <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-[#003049] text-white">
+              {/* ( users / accounts  / roles  /  priviliges... ) */}
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Link to="#">Utilisateurs</Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Link to="#">comptes</Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Link to="#">roles</Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+                  <Link to="#">priviliges</Link>
+                </DropdownMenuItem>
+
+                {/* <DropdownMenuItem>
+                  <Link to="#">Creer Compte</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="#">Creer Utilisateur</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="#">Creer role</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="#">Creer champ personalises</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="#">Lister champ personalises</Link>
+                </DropdownMenuItem> */}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
