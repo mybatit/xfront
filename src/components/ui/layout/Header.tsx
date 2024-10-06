@@ -434,15 +434,15 @@ const Header = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Comptes</Link>
+                  <Link className="w-full h-full" to="/comptes">Comptes</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Roles</Link>
+                  <Link className="w-full h-full" to="/roles">Roles</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Priviliges</Link>
+                  <Link className="w-full h-full" to="/priviliges">Priviliges</Link>
                 </DropdownMenuItem>
 
                 {/* <DropdownMenuItem>
