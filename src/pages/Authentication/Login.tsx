@@ -22,7 +22,7 @@ export default function SignUpPage() {
     try {
       // API call for login
       setLoading(true);
-      const response = await fetch("http://xapi.vengoreserve.com/api/login", {
+      const response = await fetch("http://xapi.vengoreserve.com/api/newlogin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,9 +40,11 @@ export default function SignUpPage() {
       }
 
       const data = await response.json();
-      if (data.token) {
-        // Store the token in localStorage
-        localStorage.setItem("token", data.token);
+      console.log(data);
+      
+      if (data.access_token) {
+        // Store the access_token in localStorage
+        localStorage.setItem("token", data.access_token);
         // Redirect or reload the page
         setLoading(false);
         navigate("/");

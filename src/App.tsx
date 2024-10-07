@@ -1,12 +1,12 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import Login from './pages/Authentication/Login';
 import Error404 from './pages/Authentication/Error404';
-import UtilisateursPage from './pages/UtilisateursPage';
+import UtilisateursPage from './pages/utilisateurs/UtilisateursPage';
 import RootLayout from './routes/RootLayout';
 import SynthesePage from './pages/SynthesePage';
-import ComptesPage from './pages/ComptesPage';
-import RolesPage from './pages/RolesPage';
-import PriviligesPage from './pages/PriviligesPage';
+import ComptesPage from './pages/comptes/ComptesPage';
+import RolesPage from './pages/roles/RolesPage';
+import PriviligesPage from './pages/priviliges/PriviligesPage';
 
 const App = () => {
   const router = createBrowserRouter(

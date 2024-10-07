@@ -27,13 +27,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -241,9 +234,10 @@ export default function UtilisateursPage() {
         const response = await fetch(
           `http://xapi.vengoreserve.com/api/view/users`,
           {
+            method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
-            },
+            }
           }
         );
 
