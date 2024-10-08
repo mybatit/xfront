@@ -221,8 +221,11 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
+            <DropdownMenuItem>
+                <Link className="w-full" to="/vehicules"> véhicules</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link to="#">En cours de développement.</Link>
+                <Link className="w-full" to="/vehicules-avec-reservations"> véhicules avec réservations</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -240,7 +243,8 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="#">En cours de développement.</Link>
+              <Link className="w-full h-full" to="/reservations">Reservations</Link>
+
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -347,8 +351,11 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link className="w-full" to="/vehicules"> véhicules </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">En cours de développement.</Link>
+                <Link className="w-full" to="/vehicules-avec-reservations"> véhicules avec réservations</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -366,7 +373,7 @@ const Header = () => {
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">En cours de développement.</Link>
+                  <Link className="w-full h-full" to="/reservations">Reservations</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -444,22 +451,6 @@ const Header = () => {
                 <DropdownMenuItem>
                   <Link className="w-full h-full" to="/priviliges">Priviliges</Link>
                 </DropdownMenuItem>
-
-                {/* <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Creer Compte</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Creer Utilisateur</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Creer role</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Creer champ personalises</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link className="w-full h-full" to="#">Lister champ personalises</Link>
-                </DropdownMenuItem> */}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
