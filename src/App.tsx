@@ -8,7 +8,7 @@ import ComptesPage from './pages/comptes/ComptesPage';
 import RolesPage from './pages/roles/RolesPage';
 import PriviligesPage from './pages/priviliges/PriviligesPage';
 import VehiculesAvecReservations from './pages/vehicles/VehiculesAvecReservations';
-import Vehicules from './pages/vehicles/Vehicules';
+import VehiculesPage from './pages/vehicles/Vehicules';
 import ReservationsPage from './pages/reservations/Reservations';
 
 const App = () => {
@@ -22,7 +22,7 @@ const App = () => {
           <Route path="/comptes" element={<ComptesPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/priviliges" element={<PriviligesPage />} />
-          <Route path="/vehicules" element={<Vehicules />} />
+          <Route path="/vehicules" element={<VehiculesPage />} />
           <Route path="/vehicules-avec-reservations" element={<VehiculesAvecReservations />} />
           <Route path="/reservations" element={<ReservationsPage />} />
         </Route>
