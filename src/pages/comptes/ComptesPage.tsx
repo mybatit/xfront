@@ -21,7 +21,7 @@ export interface Account {
 }
 
 const ComptesPage = () => {
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [comptes, setComptes] = useState<Account[]>([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -57,35 +57,39 @@ const ComptesPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    // setError(null);
 
     const fetchaccounts = async () => {
       try {
-        
+        const requestBody = JSON.stringify({
+          // Add the body content here
+        });
+
         const response = await fetch(
           `http://xapi.vengoreserve.com/api/view/accounts`,
           {
+            method: "GET", // Use POST if the server expects body data
             headers: {
-              Authorization: `Bearer ${token}`
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
+            body: requestBody, // Body for the request
           }
         );
 
         if (!response.ok) {
-          console.log("response " ,response);
-          throw new Error("Failed to fetch accounts");
+          console.log("response: ", response);
+          throw new Error("Failed to fetch comptes");
         }
 
         const data = await response.json();
-        console.log("data :", data);
+        console.log("data: ", data);
         if (data.accounts) {
-          setAccounts(data.accounts); // Update state with fetched data
-          // setError(null);
+          console.log("data.accounts: ", data.accounts);
+          setComptes(data.accounts); // Update state with fetched data
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching accounts:", error);
-        // setError("Failed to load accounts. Please try again later.");
+        console.error("Error fetching comptes:", error);
         setLoading(false);
       }
     };
@@ -93,9 +97,101 @@ const ComptesPage = () => {
     fetchaccounts();
   }, [token]);
 
-  console.log("accounts :", accounts);
+
+  console.log("Comptes :", comptes);
 
   return <div>ComptesPage</div>;
 };
 
 export default ComptesPage;
+
+
+
+// useEffect(() => {
+//   setLoading(true);
+
+//   const fetchaccounts = async () => {
+//     try {
+//       // Prepare query parameters if needed
+//       const params = new URLSearchParams({
+//         // Example parameters; replace with your actual parameters
+//         param1: "value1",
+//         param2: "value2",
+//       }).toString();
+
+//       const response = await fetch(
+//         `http://xapi.vengoreserve.com/api/view/accounts?${params}`, // Append parameters to the URL
+//         {
+//           method: "GET", // Keep as GET
+//           headers: {
+//             "Content-Type": "application/json", // Usually not needed for GET requests
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//       if (!response.ok) {
+//         console.log("response: ", response);
+//         throw new Error("Failed to fetch comptes");
+//       }
+
+//       const data = await response.json();
+//       console.log("data: ", data);
+//       if (data.accounts) {
+//         console.log("data.accounts: ", data.accounts);
+//         setComptes(data.accounts); // Update state with fetched data
+//         setLoading(false);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching comptes:", error);
+//       setLoading(false);
+//     }
+//   };
+
+//   fetchaccounts();
+// }, [token]);
+
+
+
+
+  // useEffect(() => {
+  //   setLoading(true);
+  
+  //   const fetchaccounts = async () => {
+  //     try {
+  //       // Prepare query parameters
+  //       const params = new URLSearchParams({
+  //         // Replace with your actual parameters and values
+
+  //       }).toString();
+  
+  //       const response = await fetch(
+  //         `http://xapi.vengoreserve.com/api/view/accounts?${params}`, // Append query parameters to the URL
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json", // Usually not required for GET requests
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  
+  //       if (!response.ok) {
+  //         console.log("response: ", response);
+  //         throw new Error("Failed to fetch comptes");
+  //       }
+  
+  //       const data = await response.json();
+  //       console.log("data: ", data);
+  //       if (data.accounts) {
+  //         console.log("data.accounts: ", data.accounts);
+  //         setComptes(data.accounts); // Update state with fetched data
+  //         setLoading(false);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching comptes:", error);
+  //       setLoading(false);
+  //     }
+  //   };
+  
+  //   fetchaccounts();
+  // }, [token]);

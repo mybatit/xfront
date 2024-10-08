@@ -222,10 +222,31 @@ const Header = () => {
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
             <DropdownMenuItem>
-                <Link className="w-full" to="/vehicules"> véhicules</Link>
+                <Link className="w-full" to="/vehicules"> Véhicules</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link className="w-full" to="/vehicules-avec-reservations"> véhicules avec réservations</Link>
+                <Link className="w-full" to="/vehicules-avec-reservations"> Véhicules avec réservations</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full bg-transparent border-none text-left hover:bg-sky-600 p-4"
+            >
+              Planning  <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-[#003049] text-white">
+            <DropdownMenuGroup>
+            <DropdownMenuItem>
+                <Link className="w-full" to="#"> Planning véhicules</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link className="w-full" to="#"> Planning users Cartographie</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -242,9 +263,36 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-[#003049] text-white">
             <DropdownMenuGroup>
+            
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Recherche avancée</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Groupes des réservations</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Récurrences</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Exports</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Suivi cartes carburant</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Suivi jawaz</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Exports</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>
               <Link className="w-full h-full" to="/reservations">Reservations</Link>
-
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -352,10 +400,31 @@ const Header = () => {
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link className="w-full" to="/vehicules"> véhicules </Link>
+                <Link className="w-full" to="/vehicules"> Véhicules </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                <Link className="w-full" to="/vehicules-avec-reservations"> véhicules avec réservations</Link>
+                <Link className="w-full" to="/vehicules-avec-reservations"> Véhicules avec réservations</Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="bg-transparent border-none hover:bg-sky-600 p-4 h-full hover:text-white"
+              >
+                Planning  <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-[#003049] text-white">
+              <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link className="w-full" to="#"> Planning véhicules </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                <Link className="w-full" to="#"> Planning users Cartographie </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -372,9 +441,37 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-[#003049] text-white">
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link className="w-full h-full" to="/reservations">Reservations</Link>
-                </DropdownMenuItem>
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Recherche avancée</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Groupes des réservations</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Récurrences</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Exports</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Suivi cartes carburant</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Suivi jawaz</Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Exports</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+              <Link className="w-full h-full" to="/reservations">Reservations</Link>
+              </DropdownMenuItem>
+              
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
