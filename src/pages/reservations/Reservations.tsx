@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
+import { PaginationState, Reservations } from "@/types/types";
 // Utility function for date formatting
 const convertDateFormat = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -47,31 +48,7 @@ const convertDateFormat = (dateStr: string) => {
   });
 };
 
-export interface Reservations {
-  id: number;
-  id_matricule: string;
-  description: string | null;
-  reservationsstatuses_id: number;
-  reservationstypes_id: number;
-  account_id: number;
-  date_creation: string;
-  date_submit: string | null;
-  date_validation: string | null;
-  date_solde: string | null;
-  created_by: number;
-  code_objects_id: number;
-  code_synchronisation_id: number;
-  deleted_at: string | null;
-  deleted: number;
-  deleted_by: number | null;
-  restored_at: string | null;
-  restored: number;
-  restored_by: number | null;
-  created_at: string;
-  updated_at: string;
-  vehicle_id: number;
-}
-
+// eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Reservations>[] = [
   {
     id: "select",
@@ -175,20 +152,6 @@ export const columns: ColumnDef<Reservations>[] = [
     },
   },
 ];
-
-// Define pagination state shapes
-export type PaginationState = {
-  pageIndex: number;
-  pageSize: number;
-};
-
-export type PaginationTableState = {
-  pagination: PaginationState;
-};
-
-export type PaginationInitialTableState = {
-  pagination?: Partial<PaginationState>;
-};
 const ReservationsPage = () => {
   const [reservations, setReservations] = useState<Reservations[]>([]);
   // // const [error, setError] = useState<string | null>(null);

@@ -37,28 +37,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  email_verified_at: string | null;
-  two_factor_confirmed_at: string | null;
-  user_creator: number;
-  account_id: number;
-  current_team_id: number | null;
-  profile_photo_path: string | null;
-  created_at: string;
-  updated_at: string;
-  id_code_objects: number;
-  id_code_synchronisation: number;
-  deleted_at: string | null;
-  deleted: number;
-  deleted_by: string | null;
-  restored_at: string | null;
-  restored_: number;
-  restored_by: string | null;
-  profile_photo_url: string;
-}
+import { PaginationState, User } from "@/types/types";
+
 
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
@@ -178,19 +158,7 @@ const columns: ColumnDef<User>[] = [
   },
 ];
 
-// Define pagination state shapes
-export type PaginationState = {
-  pageIndex: number;
-  pageSize: number;
-};
 
-export type PaginationTableState = {
-  pagination: PaginationState;
-};
-
-export type PaginationInitialTableState = {
-  pagination?: Partial<PaginationState>;
-};
 export default function UtilisateursPage() {
   const [users, setUsers] = useState<User[]>([]);
   // const [error, setError] = useState<string | null>(null);

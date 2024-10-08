@@ -37,30 +37,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
-export interface Vehicules {
-  id: number;
-  brand: string;
-  model: string;
-  matricule: string;
-  year: number | null;  // 'year' peut être un nombre ou null
-  color: string | null;  // 'color' peut être une chaîne ou null
-  vin: string;
-  mileage: number | null;  // 'mileage' peut être un nombre ou null
-  price: number | null;  // 'price' peut être un nombre ou null
-  description: string | null;  // 'description' peut être une chaîne ou null
-  created_by: number;
-  account_id: number;
-  code_objects_id: number;
-  code_synchronisation_id: number;
-  deleted_at: string | null;  // 'deleted_at' peut être une chaîne ou null
-  deleted: number;
-  deleted_by: number | null;  // 'deleted_by' peut être un nombre ou null
-  restored_at: string | null;  // 'restored_at' peut être une chaîne ou null
-  restored: number;
-  restored_by: number | null;  // 'restored_by' peut être un nombre ou null
-  created_at: string;  // En supposant que c'est une chaîne au format ISO
-  updated_at: string;  // En supposant que c'est une chaîne au format ISO
-}
+import { PaginationState, Vehicules } from "@/types/types";
+
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -169,19 +147,7 @@ const columns: ColumnDef<Vehicules>[] = [
     },
   },
 ];
-// Define pagination state shapes
-export type PaginationState = {
-  pageIndex: number;
-  pageSize: number;
-};
 
-export type PaginationTableState = {
-  pagination: PaginationState;
-};
-
-export type PaginationInitialTableState = {
-  pagination?: Partial<PaginationState>;
-};
 const VehiculesPage = () => {
     const [vehicles, setVehicles] = useState<Vehicules[]>([]);
   // // const [error, setError] = useState<string | null>(null);

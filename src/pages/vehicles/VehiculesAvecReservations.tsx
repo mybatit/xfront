@@ -63,7 +63,7 @@ const VehiculesAvecReservations = () => {
       try {
         
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/accounts`,
+          `http://xapi.vengoreserve.com/api/view/vehicles-with-bookings`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -93,7 +93,7 @@ const VehiculesAvecReservations = () => {
     fetchaccounts();
   }, [token]);
 
-  console.log("accounts :", accounts);
+  console.log("vehicles-with-bookings :", accounts);
 
   return <div>VehiculesAvecReservationsPage</div>;
 };
