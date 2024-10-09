@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState, Reservations } from "@/types/types";
+import { Link } from "react-router-dom";
 // Utility function for date formatting
 const convertDateFormat = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -277,9 +278,11 @@ const ReservationsPage = () => {
           <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
+          <Link to="/reservations/create">
           <Button className="w-full" variant="outline">
             Nouveau
           </Button>
+          </Link>
 
           <div>
             <h3 className="mb-2 font-medium">Export</h3>

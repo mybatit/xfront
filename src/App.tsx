@@ -10,6 +10,7 @@ import PriviligesPage from './pages/priviliges/PriviligesPage';
 import VehiculesAvecReservations from './pages/vehicles/VehiculesAvecReservations';
 import VehiculesPage from './pages/vehicles/Vehicules';
 import ReservationsPage from './pages/reservations/Reservations';
+import ReservationsCreatePage from './pages/reservations/ReservationsCreatePage';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/vehicules" element={<VehiculesPage />} />
           <Route path="/vehicules-avec-reservations" element={<VehiculesAvecReservations />} />
           <Route path="/reservations" element={<ReservationsPage />} />
+          <Route path="/reservations/create" element={<ReservationsCreatePage />} />
         </Route>
         <Route path="/*" element={<Error404 />} />
       </>
