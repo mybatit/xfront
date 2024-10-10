@@ -44,7 +44,7 @@ const Header = () => {
       label: "Planning",
       subItems: [
         { label: "Planning véhicules", path: "#" },
-        { label: "Planning users Cartographie", path: "#" },
+        { label: "Planning users", path: "#" },
       ],
     },
     {

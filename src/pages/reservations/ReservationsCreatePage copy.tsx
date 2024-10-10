@@ -1,7 +1,4 @@
-"use client";
-
 import { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,54 +9,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-// import Link from "next/link"
-
-interface FormData {
-  description: string;
-  account_id: number;
-  reservationstypes_id: number;
-  vehicle_id: number;
-  user_id: number[];
-  date_start: string;
-  date_end: string;
-}
+import { Loader2 } from "lucide-react";
 
 export default function ReservationsCreatePage() {
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const [token, setToken] = useState<string | null>(null);
-
-  const [formData, setFormData] = useState<FormData>({
-    description: "",
-    account_id: 1,
-    reservationstypes_id: 1,
-    vehicle_id: 1,
-    user_id: [18, 21, 22],
-    date_start: "",
-    date_end: "",
-  });
+  const [decodedToken, setDecodedToken] = useState(null);
+  const [token, setToken] = useState(""); // Add loading state
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
+    const token = localStorage.getItem("token");
+    if (token) {
       try {
-        const decodedToken = JSON.parse(atob(storedToken.split(".")[1]));
-        setToken(storedToken);
-        console.log(decodedToken);
+        setToken(token);
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
+        setDecodedToken(decodedToken);
+
       } catch (error) {
         console.error("Error decoding token:", error);
         localStorage.removeItem("token");
-        navigate("/login");
       }
     } else {
       navigate("/login");
     }
     setLoading(false);
   }, [navigate]);
+  console.log(decodedToken);
+
+  // Récupérer la liste des utilisateurs depuis une API
+  const [formData, setFormData] = useState({
+    description: "",
+    account_id: 1,
+    reservationstypes_id: 1,
+    vehicle_id: 1,
+    user_id: [], //user_id:[18,21,22]
+    date_start: "2025-4-08 10:00:00",
+    date_end: "2025-5-5 18:00:00",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -72,20 +60,22 @@ export default function ReservationsCreatePage() {
     setFormData((prev) => ({ ...prev, [name]: parseInt(value) }));
   };
 
-  const handleDateChange = (name: string, value: string) => {
-    const formattedDate = new Date(value)
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    setFormData((prev) => ({ ...prev, [name]: formattedDate }));
-  };
+//   const handleUserIdChange = (userId: number) => {
+//     setFormData((prev) => {
+//       const newUserIds = prev.user_id.includes(userId)
+//         ? prev.user_id.filter((id) => id !== userId)
+//         : [...prev.user_id, userId];
+//       return { ...prev, user_id: newUserIds };
+//     });
+//   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
-    console.log("formData :", formData);
+    setLoading(true);
 
     try {
+        console.log("formData : ",formData);
+        
       const response = await fetch(
         "http://xapi.vengoreserve.com/api/create/reservations",
         {
@@ -111,32 +101,24 @@ export default function ReservationsCreatePage() {
     } catch (error) {
       console.error("Erreur de connexion :", error);
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col max-h-screen ">
-      <div className="flex flex-1 flex-col lg:flex-row ">
+    <div className="flex flex-col">
+      <div className="flex flex-1 flex-col lg:flex-row">
         <aside className="w-full lg:w-64 bg-gray-100 p-4">
           <h3 className="font-bold mb-2">Recherche Réservation</h3>
           <Link to="/reservations">
-            <Button className="w-full mb-4" variant="outline">
+            <Button className="w-full" variant="outline">
               Réservations
             </Button>
           </Link>
 
           <div>
             <h3 className="mb-2 font-medium">Export</h3>
-            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
               Exporter
             </Button>
           </div>
@@ -144,7 +126,7 @@ export default function ReservationsCreatePage() {
         <main className="w-full flex-1 p-4">
           <form
             onSubmit={handleSubmit}
-            className="space-y-2 w-full max-w-full mx-auto p-4"
+            className="space-y-4 w-full mx-auto p-4"
           >
             <h1 className="text-2xl font-bold mb-4">Créer Réservation</h1>
 
@@ -163,7 +145,6 @@ export default function ReservationsCreatePage() {
                 className="w-full"
               />
             </div>
-
             <div>
               <label
                 htmlFor="account_id"
@@ -232,7 +213,29 @@ export default function ReservationsCreatePage() {
                 </SelectContent>
               </Select>
             </div>
+            {/* Sélection des utilisateurs */}
+            {/* <div>
+              <label className="block text-sm font-medium mb-1">User IDs</label>
+              <div className="space-y-2">
+                {users.map((user) => (
+                  <div key={user.id} className="flex items-center">
+                    <Checkbox
+                      id={`user-${user.id}`}
+                      checked={formData.user_id.includes(user.id)}
+                      onCheckedChange={() => handleUserIdChange(user.id)}
+                    />
+                    <label
+                      htmlFor={`user-${user.id}`}
+                      className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {user.first_name} (ID: {user.id})
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div> */}
 
+            {/* Autres champs du formulaire */}
             <div>
               <label
                 htmlFor="date_start"
@@ -244,8 +247,8 @@ export default function ReservationsCreatePage() {
                 type="datetime-local"
                 id="date_start"
                 name="date_start"
-                value={formData.date_start.replace(" ", "T").slice(0, 16)}
-                onChange={(e) => handleDateChange("date_start", e.target.value)}
+                value={formData.date_start}
+                onChange={handleChange}
               />
             </div>
 
@@ -260,25 +263,27 @@ export default function ReservationsCreatePage() {
                 type="datetime-local"
                 id="date_end"
                 name="date_end"
-                value={formData.date_end.replace(" ", "T").slice(0, 16)}
-                onChange={(e) => handleDateChange("date_end", e.target.value)}
+                value={formData.date_end}
+                onChange={handleChange}
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-              disabled={submitting}
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Création en cours...
-                </>
-              ) : (
-                "Créer Réservation"
-              )}
-            </Button>
+            {loading ? (
+              <Button
+                disabled
+                className="w-full flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-sky-500 hover:bg-sky-600"
+              >
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="w-full bg-sky-500 hover:bg-sky-600"
+              >
+                Créer Réservation
+              </Button>
+            )}
           </form>
         </main>
       </div>
