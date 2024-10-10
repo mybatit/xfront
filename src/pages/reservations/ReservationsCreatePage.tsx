@@ -1,7 +1,4 @@
-"use client";
-
 import { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,7 +32,7 @@ export default function ReservationsCreatePage() {
 
   const [formData, setFormData] = useState<FormData>({
     description: "",
-    account_id: 1,
+    account_id:1,
     reservationstypes_id: 1,
     vehicle_id: 1,
     user_id: [18, 21, 22],
