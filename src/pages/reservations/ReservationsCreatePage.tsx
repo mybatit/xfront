@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
 // import Link from "next/link"
 
 interface FormData {
@@ -32,10 +33,10 @@ export default function ReservationsCreatePage() {
 
   const [formData, setFormData] = useState<FormData>({
     description: "",
-    account_id:1,
+    account_id: 1,
     reservationstypes_id: 1,
     vehicle_id: 1,
-    user_id: [18, 21, 22],
+    user_id: [],
     date_start: "",
     date_end: "",
   });
@@ -76,7 +77,30 @@ export default function ReservationsCreatePage() {
       .replace("T", " ");
     setFormData((prev) => ({ ...prev, [name]: formattedDate }));
   };
+  const users = [
+    { id: 1, first_name: "User1" },
+    // { "id": 2, "first_name": "User2" },
+    // { "id": 3, "first_name": "User3" },
+    // { "id": 4, "first_name": "User4" },
+    // { "id": 5, "first_name": "User5" },
+    // { "id": 6, "first_name": "User6" },
+    // { "id": 7, "first_name": "User7" },
+    // { "id": 8, "first_name": "User8" },
+    // { "id": 9, "first_name": "User9" },
+    { id: 10, first_name: "User10" },
+    { id: 18, first_name: "User18" },
+    { id: 21, first_name: "User21" },
+    { id: 22, first_name: "User22" },
+  ];
 
+  const handleUserIdChange = (userId: number) => {
+    setFormData((prev) => {
+      const newUserIds = prev.user_id.includes(userId)
+        ? prev.user_id.filter((id) => id !== userId)
+        : [...prev.user_id, userId];
+      return { ...prev, user_id: newUserIds };
+    });
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -145,7 +169,147 @@ export default function ReservationsCreatePage() {
           >
             <h1 className="text-2xl font-bold mb-4">Créer Réservation</h1>
 
-            <div>
+            {/* Ligne pour les sélections */}
+            <div className="flex flex-wrap gap-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="account_id"
+                  className="block text-sm font-medium mb-1"
+                >
+                  ID Compte
+                </label>
+                <Select
+                  onValueChange={(value) =>
+                    handleSelectChange("account_id", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionnez le nom du compte" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Compte 1</SelectItem>
+                    <SelectItem value="2">Compte 2</SelectItem>
+                    <SelectItem value="6">Compte 6</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="reservationstypes_id"
+                  className="block text-sm font-medium mb-1"
+                >
+                  ID Type de Réservation
+                </label>
+                <Select
+                  onValueChange={(value) =>
+                    handleSelectChange("reservationstypes_id", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionnez le type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="11">Type 11</SelectItem>
+                    <SelectItem value="2">Type 2</SelectItem>
+                    <SelectItem value="3">Type 3</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="vehicle_id"
+                  className="block text-sm font-medium mb-1"
+                >
+                  ID Véhicule
+                </label>
+                <Select
+                  onValueChange={(value) =>
+                    handleSelectChange("vehicle_id", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionnez le véhicule" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Véhicule 1</SelectItem>
+                    <SelectItem value="2">Véhicule 2</SelectItem>
+                    <SelectItem value="35">Véhicule 35</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Sélection des utilisateurs */}
+            <div className="flex-1 mt-4">
+  <label className="block text-sm font-medium mb-1">
+    Sélectionnez les Utilisateurs
+  </label>
+  <div className="flex flex-wrap gap-5">
+    {users.map((user) => (
+      <div
+        key={user.id}
+        className={`flex items-center p-2 rounded-md ${
+          formData.user_id.includes(user.id) ? 'border-2 border-green-500' : 'border-2 border-transparent'
+        }`}
+      >
+        <Checkbox
+          id={`user-${user.id}`}
+          checked={formData.user_id.includes(user.id)}
+          onCheckedChange={() => handleUserIdChange(user.id)}
+        />
+        <label
+          htmlFor={`user-${user.id}`}
+          className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          {user.first_name} (ID: {user.id})
+        </label>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+            {/* Dates sur une ligne */}
+            <div className="flex flex-wrap gap-4 mt-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="date_start"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Date de Début
+                </label>
+                <Input
+                  type="datetime-local"
+                  id="date_start"
+                  name="date_start"
+                  value={formData.date_start.replace(" ", "T").slice(0, 16)}
+                  onChange={(e) =>
+                    handleDateChange("date_start", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="date_end"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Date de Fin
+                </label>
+                <Input
+                  type="datetime-local"
+                  id="date_end"
+                  name="date_end"
+                  value={formData.date_end.replace(" ", "T").slice(0, 16)}
+                  onChange={(e) => handleDateChange("date_end", e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Description en bas */}
+            <div className="mt-4">
               <label
                 htmlFor="description"
                 className="block text-sm font-medium mb-1"
@@ -161,110 +325,10 @@ export default function ReservationsCreatePage() {
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="account_id"
-                className="block text-sm font-medium mb-1"
-              >
-                ID Compte
-              </label>
-              <Select
-                onValueChange={(value) =>
-                  handleSelectChange("account_id", value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionnez l'ID du compte" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="6">6</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="reservationstypes_id"
-                className="block text-sm font-medium mb-1"
-              >
-                ID Type de Réservation
-              </label>
-              <Select
-                onValueChange={(value) =>
-                  handleSelectChange("reservationstypes_id", value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionnez l'ID du type de réservation" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="11">11</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="vehicle_id"
-                className="block text-sm font-medium mb-1"
-              >
-                ID Véhicule
-              </label>
-              <Select
-                onValueChange={(value) =>
-                  handleSelectChange("vehicle_id", value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionnez l'ID du véhicule" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="35">35</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="date_start"
-                className="block text-sm font-medium mb-1"
-              >
-                Date de Début
-              </label>
-              <Input
-                type="datetime-local"
-                id="date_start"
-                name="date_start"
-                value={formData.date_start.replace(" ", "T").slice(0, 16)}
-                onChange={(e) => handleDateChange("date_start", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="date_end"
-                className="block text-sm font-medium mb-1"
-              >
-                Date de Fin
-              </label>
-              <Input
-                type="datetime-local"
-                id="date_end"
-                name="date_end"
-                value={formData.date_end.replace(" ", "T").slice(0, 16)}
-                onChange={(e) => handleDateChange("date_end", e.target.value)}
-              />
-            </div>
-
+            {/* Bouton de soumission */}
             <Button
               type="submit"
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4"
               disabled={submitting}
             >
               {submitting ? (
