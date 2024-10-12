@@ -157,7 +157,7 @@ export default function ReservationsCreatePage() {
 
           <div>
             <h3 className="mb-2 font-medium">Export</h3>
-            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
               Exporter
             </Button>
           </div>
@@ -243,33 +243,34 @@ export default function ReservationsCreatePage() {
 
             {/* Sélection des utilisateurs */}
             <div className="flex-1 mt-4">
-  <label className="block text-sm font-medium mb-1">
-    Sélectionnez les Utilisateurs
-  </label>
-  <div className="flex flex-wrap gap-5">
-    {users.map((user) => (
-      <div
-        key={user.id}
-        className={`flex items-center p-2 rounded-md ${
-          formData.user_id.includes(user.id) ? 'border-2 border-green-500' : 'border-2 border-transparent'
-        }`}
-      >
-        <Checkbox
-          id={`user-${user.id}`}
-          checked={formData.user_id.includes(user.id)}
-          onCheckedChange={() => handleUserIdChange(user.id)}
-        />
-        <label
-          htmlFor={`user-${user.id}`}
-          className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          {user.first_name} (ID: {user.id})
-        </label>
-      </div>
-    ))}
-  </div>
-</div>
-
+              <label className="block text-sm font-medium mb-1">
+                Sélectionnez les Utilisateurs
+              </label>
+              <div className="flex flex-wrap gap-5">
+                {users.map((user) => (
+                  <div
+                    key={user.id}
+                    className={`flex items-center p-2 rounded-md ${
+                      formData.user_id.includes(user.id)
+                        ? "border-2 border-sky-600"
+                        : "border-2 border-transparent"
+                    }`}
+                  >
+                    <Checkbox
+                      id={`user-${user.id}`}
+                      checked={formData.user_id.includes(user.id)}
+                      onCheckedChange={() => handleUserIdChange(user.id)}
+                    />
+                    <label
+                      htmlFor={`user-${user.id}`}
+                      className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {user.first_name} (ID: {user.id})
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* Dates sur une ligne */}
             <div className="flex flex-wrap gap-4 mt-4">
@@ -328,7 +329,7 @@ export default function ReservationsCreatePage() {
             {/* Bouton de soumission */}
             <Button
               type="submit"
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4"
+              className="w-full mt-4 text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-50"
               disabled={submitting}
             >
               {submitting ? (
