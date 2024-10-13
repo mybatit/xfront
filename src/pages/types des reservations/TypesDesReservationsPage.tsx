@@ -38,7 +38,8 @@ import {
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState } from "@/types/types";
-
+// Utiliser un identifiant unique pour chaque table
+const tableId = "typesDesReservations";
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -280,6 +281,21 @@ const TypesDesReservationsPage = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+    // Récupérer les champs sélectionnés de localStorage lors du chargement
+    useEffect(() => {
+        const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
+        if (savedVisibility) {
+          setColumnVisibility(JSON.parse(savedVisibility));
+        }
+      }, []);
+    
+      // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
+      useEffect(() => {
+        localStorage.setItem(
+          `columnVisibility-${tableId}`,
+          JSON.stringify(columnVisibility)
+        );
+      }, [columnVisibility]);
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page

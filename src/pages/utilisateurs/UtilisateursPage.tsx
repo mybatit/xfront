@@ -39,7 +39,8 @@ import {
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState, User } from "@/types/types";
 
-
+// Utiliser un identifiant unique pour chaque table
+const tableId = "users";
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -80,7 +81,7 @@ const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "username",
     header: "Nom",
   },
   {
@@ -158,7 +159,6 @@ const columns: ColumnDef<User>[] = [
   },
 ];
 
-
 export default function UtilisateursPage() {
   const [users, setUsers] = useState<User[]>([]);
   // const [error, setError] = useState<string | null>(null);
@@ -205,7 +205,7 @@ export default function UtilisateursPage() {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
-            }
+            },
           }
         );
 
@@ -238,6 +238,21 @@ export default function UtilisateursPage() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // Récupérer les champs sélectionnés de localStorage lors du chargement
+  useEffect(() => {
+    const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
+    if (savedVisibility) {
+      setColumnVisibility(JSON.parse(savedVisibility));
+    }
+  }, []);
+
+  // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
+  useEffect(() => {
+    localStorage.setItem(
+      `columnVisibility-${tableId}`,
+      JSON.stringify(columnVisibility)
+    );
+  }, [columnVisibility]);
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page

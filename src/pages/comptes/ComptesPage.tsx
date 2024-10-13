@@ -59,6 +59,8 @@ export interface Account {
   pilot_name: string | null;
 }
 
+// Utiliser un identifiant unique pour chaque table
+const tableId = "comptes";
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -256,6 +258,21 @@ const ComptesPage = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+    // Récupérer les champs sélectionnés de localStorage lors du chargement
+    useEffect(() => {
+      const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
+      if (savedVisibility) {
+        setColumnVisibility(JSON.parse(savedVisibility));
+      }
+    }, []);
+  
+    // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
+    useEffect(() => {
+      localStorage.setItem(
+        `columnVisibility-${tableId}`,
+        JSON.stringify(columnVisibility)
+      );
+    }, [columnVisibility]);
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page
