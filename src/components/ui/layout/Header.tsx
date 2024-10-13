@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CreditCard,
   Settings,
@@ -22,9 +22,101 @@ import {
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+interface User {
+  id: number;
+  first_name: string | null;
+  last_name: string | null;
+  username: string;
+  account_name: string;
+  description: string | null;
+  email: string;
+  email_verified_at: string | null;
+  two_factor_confirmed_at: string | null;
+  created_by: number;
+  account_id: number;
+  current_team_id: number | null;
+  profile_photo_path: string | null;
+  created_at: string;
+  updated_at: string;
+  role_id: number;
+  code_unique_id: number;
+  code_synchronisation_id: number;
+  deleted_at: string | null;
+  deleted: number;
+  deleted_by: number | null;
+  restored_at: string | null;
+  restored_: number;
+  restored_by: number | null;
+  code_objects: string;
+  code_synchronisations: string;
+  profile_photo_url: string;
+}
+
+interface MyToken {
+  success: boolean;
+  message: string;
+  this_user: User;
+}
 
 const Header = () => {
+  const [decodedToken, setDecodedToken] = useState<MyToken>();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [token, settoken] = useState(""); // Add loading state
+  useEffect(() => {
+    // Check for token in local storage
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        settoken(token);
+      } catch (error) {
+        console.error("pas token:", error);
+        localStorage.removeItem("token"); // Clear invalid token
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // console.log(token);
+  // console.log("decodedToken :", decodedToken);
+  console.log(loading);
+
+  useEffect(() => {
+    setLoading(true);
+
+    const fetchMyToken = async () => {
+      try {
+        const response = await fetch(
+          `http://xapi.vengoreserve.com/api/mytoken`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          console.log("response: ", response);
+          throw new Error("Failed to fetch mytoken");
+        }
+
+        const data = await response.json();
+        console.log("data mytoken: ", data);
+        if (data) {
+          setDecodedToken(data);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching mytoken:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchMyToken();
+  }, [token]);
+
   // State to handle mobile menu collapse
   const [menuOpen, setMenuOpen] = useState(false);
   // Define menu items
@@ -149,7 +241,8 @@ const Header = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="text-black">
-                  Farhan Mohammad <ChevronDown className="ml-2 h-4 w-4" />
+                  {decodedToken?.this_user.username}
+                  <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
