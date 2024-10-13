@@ -39,26 +39,6 @@ import {
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState } from "@/types/types";
 
-export interface Account {
-  id: number;
-  name: string;
-  description: string | null;
-  parent: number;
-  creator: number;
-  pilot: number;
-  code_objects_id: number;
-  code_synchronisation_id: number;
-  deleted_at: string | null;
-  deleted: number;
-  deleted_by: number;
-  created_by: number | null;
-  restored: number;
-  restored_by: number;
-  created_at: string;
-  updated_at: string;
-  pilot_name: string | null;
-}
-
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -74,8 +54,28 @@ function convertDateFormat(dateString: string): string {
   // Retourner le format souhaité
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
+interface TypesReservation {
+  form_id: number;
+  id: number;
+  created_at: string; // ISO date string
+  updated_at: string; // ISO date string
+  name: string;
+  description: string;
+  account_id: number;
+  created_by: number;
+  code_objects_id: number;
+  code_synchronisations_id: number;
+  deleted_at: string | null;
+  deleted: number;
+  deleted_by: number | null;
+  restored_at: string | null;
+  restored: number;
+  restored_by: number | null;
+  promote: string | null;
+  pro: string | null;
+}
 
-const columns: ColumnDef<Account>[] = [
+const columns: ColumnDef<TypesReservation>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -103,16 +103,8 @@ const columns: ColumnDef<Account>[] = [
     header: "Nom",
   },
   {
-    accessorKey: "creator",
-    header: "Créateur",
-  },
-  {
-    accessorKey: "pilot",
-    header: "Pilote",
-  },
-  {
-    accessorKey: "code_objects_id",
-    header: "Code Objects ID",
+    accessorKey: "description",
+    header: "Description",
   },
   {
     accessorKey: "created_at",
@@ -121,25 +113,57 @@ const columns: ColumnDef<Account>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Créé à
+        Créé_à
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
     cell: ({ getValue }) => {
       const dateStr = getValue<string>();
-      return convertDateFormat(dateStr);
+      return convertDateFormat(dateStr); // Convert date to preferred format
     },
+  },
+  {
+    accessorKey: "account_id",
+    header: "ID du Compte",
+  },
+  {
+    accessorKey: "created_by",
+    header: "Créé par",
+  },
+  {
+    accessorKey: "code_objects_id",
+    header: "Code Objects ID",
+  },
+  {
+    accessorKey: "code_synchronisations_id",
+    header: "Code Synchronisations ID",
   },
   {
     accessorKey: "deleted",
     header: "Supprimé",
+    cell: ({ getValue }) => (getValue() ? "Oui" : "Non"), // Display "Oui" for deleted, "Non" otherwise
+  },
+  {
+    accessorKey: "restored",
+    header: "Restauré",
+    cell: ({ getValue }) => (getValue() ? "Oui" : "Non"), // Display "Oui" for restored, "Non" otherwise
+  },
+  {
+    accessorKey: "promote",
+    header: "Promote",
+    cell: ({ getValue }) => (getValue() === "null" ? "Non" : getValue()), // Show "Non" if null
+  },
+  {
+    accessorKey: "pro",
+    header: "Pro",
+    cell: ({ getValue }) => (getValue() === null ? "Non" : getValue()), // Show "Non" if null
   },
   {
     id: "actions",
     header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const item = row.original;
+      const reservation = row.original;
 
       return (
         <DropdownMenu>
@@ -151,14 +175,16 @@ const columns: ColumnDef<Account>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(item.name)}>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(reservation.name)}
+            >
               <Copy className="mr-2 h-4 w-4" />
               Copier le nom
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Eye className="mr-2 h-4 w-4" />
-              Voir les détails
+              View details
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Trash2 className="mr-2 h-4 w-4" />
@@ -171,8 +197,10 @@ const columns: ColumnDef<Account>[] = [
   },
 ];
 
-const ComptesPage = () => {
-  const [comptes, setComptes] = useState<Account[]>([]);
+const TypesDesReservationsPage = () => {
+  const [typesDesReservations, setTypesDesReservations] = useState<
+    TypesReservation[]
+  >([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -212,7 +240,7 @@ const ComptesPage = () => {
     const fetchaccounts = async () => {
       try {
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/accounts`,
+          `http://xapi.vengoreserve.com/api/view/reservations-types`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -222,21 +250,20 @@ const ComptesPage = () => {
 
         if (!response.ok) {
           console.log("response: ", response);
-          throw new Error("Failed to fetch comptes");
+          throw new Error("Failed to fetch typesDesReservations");
         }
 
-        
         const data = await response.json();
         console.log("data: ", data);
-        console.log("data.myaccounts: ", data.myaccounts);
-        // console.log("data.$myaccounts: ", data.$myaccounts);
+        console.log("data.reservations_types: ", data.reservations_types);
+        // console.log("data.$reservations_types: ", data.$reservations_types);
 
-        if (data.myaccounts) {
-          setComptes(data.myaccounts); // Update state with fetched data
+        if (data.reservations_types) {
+          setTypesDesReservations(data.reservations_types); // Update state with fetched data
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching comptes:", error);
+        console.error("Error fetching typesDesReservations:", error);
         setLoading(false);
       }
     };
@@ -244,10 +271,7 @@ const ComptesPage = () => {
     fetchaccounts();
   }, [token]);
 
-
-  console.log("Comptes :", comptes);
-
-  
+  console.log("Types Des Reservations :", typesDesReservations);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -263,7 +287,7 @@ const ComptesPage = () => {
   });
 
   const table = useReactTable({
-    data: comptes,
+    data: typesDesReservations,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -309,7 +333,7 @@ const ComptesPage = () => {
             </Select>
           </div> */}
 
-          <h3 className="font-bold mb-2">Recherche compte</h3>
+          <h3 className="font-bold mb-2">Recherche type de reservation</h3>
           <Input
             placeholder="Rechercher par nom..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -338,7 +362,7 @@ const ComptesPage = () => {
           <div className="flex flex-col lg:flex-row items-center py-2">
             <header className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                <Users className="mr-2" /> Comptes
+                <Users className="mr-2" /> Types des réservations
               </h1>
             </header>
             <DropdownMenu>
@@ -427,7 +451,7 @@ const ComptesPage = () => {
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Aucun compte trouvé.
+                      Aucun utilisateur trouvé.
                     </TableCell>
                   </TableRow>
                 )}
@@ -465,5 +489,4 @@ const ComptesPage = () => {
   );
 };
 
-export default ComptesPage;
-
+export default TypesDesReservationsPage;

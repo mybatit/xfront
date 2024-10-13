@@ -75,7 +75,7 @@ const Header = () => {
       subItems: [
         { label: "Référentiels", path: "#" },
         { label: "Formalirers", path: "#" },
-        { label: "Types des réservations", path: "#" },
+        { label: "Types des réservations", path: "/types-des-reservations" },
         { label: "Types d'activités", path: "#" },
         { label: "États de réservation", path: "#" },
       ],
