@@ -214,9 +214,9 @@ export default function UtilisateursPage() {
         }
 
         const data = await response.json();
-        // console.log("data :", data.users);
-        if (data.users) {
-          setUsers(data.users); // Update state with fetched data
+        console.log("data :", data);
+        if (data.data_items) {
+          setUsers(data.data_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }

@@ -40,7 +40,7 @@ import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState } from "@/types/types";
 
 // Utiliser un identifiant unique pour chaque table
-const tableId = "typesDesReservations";
+const tableId = "formalirers";
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -56,136 +56,29 @@ function convertDateFormat(dateString: string): string {
   // Retourner le format souhaité
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
-interface ReservationsType {
-  form_id: number;
-  id: number;
-  created_at: string; // ou Date si vous préférez manipuler des objets Date
-  updated_at: string; // ou Date
-  name: string;
-  description: string;
-  account_id: number;
-  created_by: number;
-  deleted_at: string | null; // ou Date | null si vous préférez Date
-  deleted: number;
-  deleted_by: number | null;
-  restored_at: string | null; // ou Date | null
-  restored: number;
-  restored_by: number | null;
-  code_objects: string;
-  code_synchronisations: string;
-  code_unique_id: number;
-  account_name: string;
-}
-const columns: ColumnDef<ReservationsType>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name", // corresponds to "name" in your data
-    header: "Nom de réservation",
-  },
-  {
-    accessorKey: "description", // corresponds to "description" in your data
-    header: "Description",
-  },
-  {
-    accessorKey: "created_at", // corresponds to "created_at" in your data
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Créé_à
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ getValue }) => {
-      const dateStr = getValue<string>();
-      return convertDateFormat(dateStr);
-    },
-  },
-  {
-    accessorKey: "account_name", // corresponds to "account_name" in your data
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Nom du compte
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "id", // corresponds to "id" in your data
-    header: "ID",
-  },
-  {
-    accessorKey: "account_id", // corresponds to "account_id" in your data
-    header: "ID du compte",
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const reservation = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(reservation.name)}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copier le nom
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Eye className="mr-2 h-4 w-4" />
-              Voir les détails
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Trash2 className="mr-2 h-4 w-4" />
-              Supprimer
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+interface Formalirer {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    name: string;
+    description: string | null;
+    created_by: number;
+    account_id: number;
+    deleted_at: string | null;
+    deleted: number;
+    deleted_by: number | null;
+    restored_at: string | null;
+    restored: number;
+    restored_by: number | null;
+    code_objects: string;
+    code_synchronisations: string;
+    code_unique_id: number;
+  }
+  
 
-const TypesDesReservationsPage = () => {
-  const [reservationsTypes, setReservationsTypes] = useState<
-    ReservationsType[]
-  >([]);
+const Formalirers = () => {
+  const [formalirers, setFormalirers] = useState<Formalirer[]>([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -225,30 +118,32 @@ const TypesDesReservationsPage = () => {
 
     const fetchaccounts = async () => {
       try {
+        
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/reservations-types`,
+          `http://xapi.vengoreserve.com/api/view/forms`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
           }
         );
 
         if (!response.ok) {
-          console.log("response ", response);
-          throw new Error("Failed to fetch reservationsTypes");
+          console.log("response " ,response);
+          throw new Error("Failed to fetch formalirers");
         }
 
         const data = await response.json();
         console.log("data :", data);
         if (data.data_items) {
-          setReservationsTypes(data.data_items); // Update state with fetched data
+          setFormalirers(data.data_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching reservationsTypes:", error);
-        // setError("Failed to load reservationsTypes. Please try again later.");
+        console.error("Error fetching formalirers:", error);
+        // setError("Failed to load formalirers. Please try again later.");
         setLoading(false);
       }
     };
@@ -256,7 +151,107 @@ const TypesDesReservationsPage = () => {
     fetchaccounts();
   }, [token]);
 
-  console.log("reservationsTypes :", reservationsTypes);
+  console.log("formalirers :", formalirers);
+  const columns: ColumnDef<Formalirer>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "Nom",
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+      cell: ({ getValue }) => getValue<string>() || "N/A",
+    },
+    {
+      accessorKey: "created_at",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Créé à
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ getValue }) => {
+        const dateStr = getValue<string>();
+        return convertDateFormat(dateStr);
+      },
+    },
+    {
+      accessorKey: "account_id",
+      header: "ID du compte",
+    },
+    {
+      accessorKey: "deleted",
+      header: "Supprimé",
+      cell: ({ getValue }) => (getValue<number>() === 0 ? "Non" : "Oui"),
+    },
+    {
+      accessorKey: "restored",
+      header: "Restauré",
+      cell: ({ getValue }) => (getValue<number>() === 0 ? "Non" : "Oui"),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+  
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(item.name)}
+              >
+                <Copy className="mr-2 h-4 w-4" />
+                Copier le nom
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Eye className="mr-2 h-4 w-4" />
+                Voir les détails
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Trash2 className="mr-2 h-4 w-4" />
+                Supprimer
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -288,7 +283,7 @@ const TypesDesReservationsPage = () => {
   });
 
   const table = useReactTable({
-    data: reservationsTypes,
+    data: formalirers,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -306,7 +301,7 @@ const TypesDesReservationsPage = () => {
       rowSelection,
       pagination, // Include pagination state
     },
-  });
+  });  
   return (
     <div className="flex flex-col ">
       {/* Main Content */}
@@ -334,9 +329,9 @@ const TypesDesReservationsPage = () => {
             </Select>
           </div> */}
 
-          <h3 className="font-bold mb-2">Recherche type</h3>
+          <h3 className="font-bold mb-2">Recherche Formalirer</h3>
           <Input
-            placeholder="Rechercher par mon..."
+            placeholder="Rechercher par nom..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
@@ -363,7 +358,7 @@ const TypesDesReservationsPage = () => {
           <div className="flex flex-col lg:flex-row items-center py-2">
             <header className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                <Users className="mr-2" /> Types des reservations
+                <Users className="mr-2" /> Formalirers
               </h1>
             </header>
             <DropdownMenu>
@@ -452,7 +447,7 @@ const TypesDesReservationsPage = () => {
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Aucun utilisateur trouvé.
+                      Aucun Formalirer trouvé.
                     </TableCell>
                   </TableRow>
                 )}
@@ -490,4 +485,5 @@ const TypesDesReservationsPage = () => {
   );
 };
 
-export default TypesDesReservationsPage;
+
+export default Formalirers

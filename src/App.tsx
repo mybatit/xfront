@@ -12,6 +12,7 @@ import VehiculesPage from './pages/vehicles/Vehicules';
 import ReservationsPage from './pages/reservations/Reservations';
 import ReservationsCreatePage from './pages/reservations/ReservationsCreatePage';
 import TypesDesReservationsPage from './pages/types des reservations/TypesDesReservationsPage';
+import Formalirers from './pages/formalirers/Formalirers';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -20,14 +21,21 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<RootLayout />}>
           <Route index element={<SynthesePage />} />
-          <Route path="/utilisateurs" element={<UtilisateursPage />} />
-          <Route path="/comptes" element={<ComptesPage />} />
+          {/* Administrateur */}
+          <Route path="/utilisateurs" element={<UtilisateursPage />} /> {/* 👍✨*/}
+          <Route path="/comptes" element={<ComptesPage />} /> {/* 👍✨*/}
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/priviliges" element={<PriviligesPage />} />
+          {/* Paramètres */}
+          <Route path="/formalirers" element={<Formalirers />} /> {/* 👍✨*/}
+          <Route path="/types-des-reservations" element={<TypesDesReservationsPage />} /> {/* 👍✨*/}
+          {/* Affichage de la liste des statuts de réservation */} {/* */}
+          <Route path="/reservations" element={<ReservationsPage />} />
+
+
           <Route path="/vehicules" element={<VehiculesPage />} />
           <Route path="/vehicules-avec-reservations" element={<VehiculesAvecReservations />} />
           <Route path="/reservations" element={<ReservationsPage />} />
-          <Route path="/types-des-reservations" element={<TypesDesReservationsPage />} />
           <Route path="/reservations/create" element={<ReservationsCreatePage />} />
         </Route>
         <Route path="/*" element={<Error404 />} />
@@ -38,3 +46,5 @@ const App = () => {
 }
 
 export default App
+
+
