@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState, User } from "@/types/types";
+import { Link } from "react-router-dom";
 
 // Utiliser un identifiant unique pour chaque table
 const tableId = "users";
@@ -319,9 +320,11 @@ export default function UtilisateursPage() {
           <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
+          <Link to="/utilisateurs/create">
           <Button className="w-full" variant="outline">
             Nouveau
           </Button>
+          </Link>
 
           <div>
             <h3 className="mb-2 font-medium">Export</h3>

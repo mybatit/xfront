@@ -13,6 +13,7 @@ import ReservationsPage from './pages/reservations/Reservations';
 import ReservationsCreatePage from './pages/reservations/ReservationsCreatePage';
 import TypesDesReservationsPage from './pages/types des reservations/TypesDesReservationsPage';
 import Formalirers from './pages/formalirers/Formalirers';
+import CreateUtilisateursPage from './pages/utilisateurs/CreateUtilisateursPage';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const App = () => {
           <Route index element={<SynthesePage />} />
           {/* Administrateur */}
           <Route path="/utilisateurs" element={<UtilisateursPage />} /> {/* 👍✨*/}
+          <Route path="/utilisateurs/create" element={<CreateUtilisateursPage />} />
           <Route path="/comptes" element={<ComptesPage />} /> {/* 👍✨*/}
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/priviliges" element={<PriviligesPage />} />
