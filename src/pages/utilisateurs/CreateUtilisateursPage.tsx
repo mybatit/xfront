@@ -12,20 +12,33 @@ import {
 
 import { Link } from "react-router-dom";
 
-export default function CreateUtilisateursPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [accountId, setAccountId] = useState("7");
+// Définir une interface pour les données du formulaire
+interface FormData {
+  email: string;
+  password: string;
+  password_confirmation: string;
+  account_id: number;
+}
 
+export default function CreateUtilisateursPage() {
+  // Utiliser l'interface FormData pour les types des états
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
+  const [accountId, setAccountId] = useState<string>("");
+
+  // Typage du gestionnaire de soumission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted", {
+
+    const formData: FormData = {
       email,
       password,
-      passwordConfirmation,
-      accountId,
-    });
+      password_confirmation: passwordConfirmation,
+      account_id: parseInt(accountId, 10), // Convertir accountId en nombre
+    };
+
+    console.log("Form submitted", formData);
   };
 
   return (
@@ -49,7 +62,7 @@ export default function CreateUtilisateursPage() {
         <main className="w-full flex-1 p-4">
           <div className="max-w-full mx-auto p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-6">
-              {`Ajout d'un utisateur`}
+              {`Ajout d'un utilisateur`}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Champ Email */}
@@ -89,13 +102,13 @@ export default function CreateUtilisateursPage() {
                 />
               </div>
 
-              {/* Champ password_confirmation*/}
+              {/* Champ password_confirmation */}
               <div className="flex items-center">
                 <Label
                   htmlFor="password-confirmation"
                   className="w-1/3 text-right mr-4 text-blue-500"
                 >
-                  * password-confirmation
+                  * Confirmation du mot de passe
                 </Label>
                 <Input
                   id="password-confirmation"
@@ -107,13 +120,13 @@ export default function CreateUtilisateursPage() {
                 />
               </div>
 
-              {/* Autres champs similaires */}
+              {/* Champ account_id */}
               <div className="flex items-center">
                 <Label
                   htmlFor="account-id"
                   className="w-1/3 text-right mr-4 text-blue-500"
                 >
-                  * account_id
+                  * ID du Compte
                 </Label>
                 <Select value={accountId} onValueChange={setAccountId}>
                   <SelectTrigger id="account-id" className="w-2/3">
