@@ -38,7 +38,10 @@ import {
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState } from "@/types/types";
+import { Link } from "react-router-dom";
 
+// Utiliser un identifiant unique pour chaque table
+const tableId = "roles";
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -54,22 +57,24 @@ function convertDateFormat(dateString: string): string {
   // Retourner le format souhaité
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
+
 interface Role {
   id: number;
-  created_at: string;  // Date string in ISO format
-  updated_at: string;  // Date string in ISO format
+  created_at: string; // ISO date string
+  updated_at: string; // ISO date string
   name: string;
   description: string | null;
   created_by: number;
   account_id: number;
-  code_objects_id: number;
-  code_synchronisation_id: number;
-  deleted_at: string | null;  // Date string or null
+  deleted_at: string | null; // ISO date string or null
   deleted: number;
   deleted_by: number | null;
-  restored_at: string | null;  // Date string or null
+  restored_at: string | null; // ISO date string or null
   restored: number;
   restored_by: number | null;
+  code_objects: string;
+  code_synchronisations: string;
+  code_unique_id: number;
 }
 
 const columns: ColumnDef<Role>[] = [
@@ -102,6 +107,10 @@ const columns: ColumnDef<Role>[] = [
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ getValue }) => {
+      const description = getValue<string>() || "N/A"; // Default to "N/A" if null
+      return description;
+    },
   },
   {
     accessorKey: "created_at",
@@ -121,30 +130,15 @@ const columns: ColumnDef<Role>[] = [
   },
   {
     accessorKey: "account_id",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        ID du compte
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "code_objects_id",
-    header: "ID de l'objet",
-  },
-  {
-    accessorKey: "code_synchronisation_id",
-    header: "ID de synchronisation",
+    header: "ID du compte",
+    cell: ({ getValue }) => getValue<number>(),
   },
   {
     id: "actions",
     header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const role = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -157,7 +151,7 @@ const columns: ColumnDef<Role>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(role.name)}
+              onClick={() => navigator.clipboard.writeText(user.name)}
             >
               <Copy className="mr-2 h-4 w-4" />
               Copier le nom
@@ -178,14 +172,17 @@ const columns: ColumnDef<Role>[] = [
   },
 ];
 
+
 const RolesPage = () => {
-    const [roles, setRoles] = useState<Role[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const [decodedToken, setDecodedToken] = useState(null);
   const [token, settoken] = useState(""); // Add loading state
+  console.log(loading);
+
 
   useEffect(() => {
     // Check for token in local storage
@@ -197,7 +194,7 @@ const RolesPage = () => {
         const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
         // Set user information based on decoded token
-        // console.log("Decoded Token:", decodedToken);
+        console.log("Decoded Token:", decodedToken);
         setDecodedToken(decodedToken);
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -209,35 +206,33 @@ const RolesPage = () => {
     }
     setLoading(false); // Set loading to false after checking token
   }, [navigate]);
-  // console.log(token);
-  console.log(decodedToken);
-  console.log(loading);
 
+  console.log("data user Decoded", decodedToken);
+  // console.log("token", token);
   useEffect(() => {
     setLoading(true);
     // setError(null);
 
-    const fetchaccounts = async () => {
+    const fetchusers = async () => {
       try {
-        
         const response = await fetch(
           `http://xapi.vengoreserve.com/api/view/roles`,
           {
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
           }
         );
 
         if (!response.ok) {
-          console.log("response " ,response);
           throw new Error("Failed to fetch roles");
         }
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.roles) {
-          setRoles(data.roles); // Update state with fetched data
+        if (data.data_items) {
+          setRoles(data.data_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
@@ -248,10 +243,12 @@ const RolesPage = () => {
       }
     };
 
-    fetchaccounts();
+    fetchusers();
   }, [token]);
 
-  console.log("roles :", roles);
+
+
+  console.log("Roles :", roles);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -260,6 +257,21 @@ const RolesPage = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // Récupérer les champs sélectionnés de localStorage lors du chargement
+  useEffect(() => {
+    const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
+    if (savedVisibility) {
+      setColumnVisibility(JSON.parse(savedVisibility));
+    }
+  }, []);
+
+  // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
+  useEffect(() => {
+    localStorage.setItem(
+      `columnVisibility-${tableId}`,
+      JSON.stringify(columnVisibility)
+    );
+  }, [columnVisibility]);
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page
@@ -286,165 +298,192 @@ const RolesPage = () => {
       pagination, // Include pagination state
     },
   });
-  return     <div className="flex flex-col ">
-  {/* Main Content */}
-  <div className="flex flex-1 flex-col lg:flex-row">
-    {/* aside */}
-    <aside className="w-full lg:w-64 bg-gray-100 p-4">
 
+  return (
+    <div className="flex flex-col ">
+      {/* Main Content */}
+      <div className="flex flex-1 flex-col lg:flex-row">
+        {/* aside */}
+        <aside className="w-full lg:w-64 bg-gray-100 p-4">
+          {/* <h2 className="text-lg font-semibold mb-2">Agence</h2>
 
-      <h3 className="font-bold mb-2">Recherche role</h3>
-      <Input
-        placeholder="Rechercher par e-mails..."
-        value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn("email")?.setFilterValue(event.target.value)
-        }
-        className="mb-2 bg-white"
-      />
-      <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
-        <Search className="mr-2 h-4 w-4" /> Rechercher
-      </Button>
-      <Button className="w-full" variant="outline">
-        Nouveau
-      </Button>
+          <Button variant="outline" className="text-black mb-2 w-full">
+            <span className="ml-2">Efficient Technology</span>
+            <GitFork className="ml-2 h-5 w-5" />
+          </Button>
 
-      <div>
-        <h3 className="mb-2 font-medium">Export</h3>
-        <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
-          Exporter
-        </Button>
-      </div>
-    </aside>
+          <div>
+            <h3 className="mb-2 font-medium">Géolocalisation</h3>
+            <Select>
+              <SelectTrigger className="w-full mb-2 bg-white">
+                <SelectValue placeholder="Sélectionner" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="option1">Option 1</SelectItem>
+                <SelectItem value="option2">Option 2</SelectItem>
+                <SelectItem value="option3">Option 3</SelectItem>
+              </SelectContent>
+            </Select>
+          </div> */}
 
-    {/* Main */}
-    <main className="w-full flex-1 p-4">
-      <div className="flex flex-col lg:flex-row items-center py-2">
-        <header className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-            <Users className="mr-2" /> Roles
-          </h1>
-        </header>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+          <h3 className="font-bold mb-2">Recherche Role</h3>
+          <Input
+            placeholder="Rechercher par nom..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="mb-2 bg-white"
+          />
+          <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
+            <Search className="mr-2 h-4 w-4" /> Rechercher
+          </Button>
+          <Link to="/roles/create">
+          <Button className="w-full" variant="outline">
+            Nouveau
+          </Button>
+          </Link>
+
+          <div>
+            <h3 className="mb-2 font-medium">Export</h3>
+            <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
+              Exporter
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                const columnLabel =
-                  column.id === "name"
-                    ? "Nom"
-                    : column.id === "created_at"
-                    ? "Créé_à"
-                    : column.id === "account_name"
-                    ? "Nom du compte"
-                    : column.id;
+          </div>
+        </aside>
 
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {columnLabel}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+        {/* Main */}
+        <main className="w-full flex-1 p-4">
+          <div className="flex flex-col lg:flex-row items-center py-2">
+            <header className="flex-1">
+              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+                <Users className="mr-2" /> Roles
+              </h1>
+            </header>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  Columns <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    const columnLabel =
+                      column.id === "name"
+                        ? "Nom"
+                        : column.id === "created_at"
+                        ? "Créé_à"
+                        : column.id === "account_name"
+                        ? "Nom du compte"
+                        : column.id;
+
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {columnLabel}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 flex items-center justify-center"
-                >
-                  <Loader />
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 flex items-center justify-center"
+                    >
+                      <Loader />
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Aucun role trouvé.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      Aucun Role trouvé.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Précédent
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Suivant
-          </Button>
-        </div>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex-1 text-sm text-muted-foreground">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Précédent
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Suivant
+              </Button>
+            </div>
+          </div>
+        </main>
       </div>
-    </main>
-  </div>
-</div>;
+    </div>
+  );
 };
-export default RolesPage
+
+export default RolesPage;
+
+

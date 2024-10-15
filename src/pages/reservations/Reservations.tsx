@@ -37,8 +37,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
-import { PaginationState, Reservations } from "@/types/types";
+import { PaginationState } from "@/types/types";
 import { Link } from "react-router-dom";
+const tableId = "reservations";
+
 // Utility function for date formatting
 const convertDateFormat = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -49,8 +51,44 @@ const convertDateFormat = (dateStr: string) => {
   });
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const columns: ColumnDef<Reservations>[] = [
+interface Reservations {
+  id: number;
+  matricule: string;
+  description: string | null;
+  reservationsstatuses_id: number;
+  reservationstypes_id: number;
+  account_id: number;
+  date_creation: string;
+  date_submit: string | null;
+  date_validation: string | null;
+  date_solde: string | null;
+  created_by: number;
+  code_objects_id: number;
+  code_synchronisations_id: number;
+  deleted_at: string | null;
+  deleted: number;
+  deleted_by: number | null;
+  restored_at: string | null;
+  restored: number;
+  restored_by: number | null;
+  created_at: string;
+  updated_at: string;
+  vehicle_id: number;
+  date_start: string;
+  date_end: string;
+  code_objects: string;
+  code_synchronisations: string;
+  name: string;
+  status: string;
+  code_unique_id: number;
+  account_name: string;
+  before_date_start: string | null;
+  after_date_end: string | null;
+  vehiclesdisponibilities_id: number | null;
+  usersdisponibilities_id: number | null;
+}
+
+const columns: ColumnDef<Reservations>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -74,16 +112,12 @@ export const columns: ColumnDef<Reservations>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id_matricule",
+    accessorKey: "matricule",
     header: "Matricule",
   },
   {
     accessorKey: "description",
     header: "Description",
-    cell: ({ getValue }) => {
-      const description = getValue<string | null>();
-      return description ? description : "N/A";
-    },
   },
   {
     accessorKey: "date_creation",
@@ -92,26 +126,38 @@ export const columns: ColumnDef<Reservations>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Créé à
+        Date de Création
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
     cell: ({ getValue }) => {
       const dateStr = getValue<string>();
-      return convertDateFormat(dateStr);
+      return convertDateFormat(dateStr); // Assuming convertDateFormat is defined
     },
   },
   {
-    accessorKey: "account_id",
-    header: "ID du Compte",
+    accessorKey: "account_name",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Nom du compte
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
   },
   {
-    accessorKey: "created_by",
-    header: "Créé Par",
+    accessorKey: "status",
+    header: "Statut",
   },
   {
-    accessorKey: "vehicle_id",
-    header: "ID du Véhicule",
+    accessorKey: "date_start",
+    header: "Date de Début",
+  },
+  {
+    accessorKey: "date_end",
+    header: "Date de Fin",
   },
   {
     id: "actions",
@@ -132,11 +178,11 @@ export const columns: ColumnDef<Reservations>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(reservation.id_matricule)
+                navigator.clipboard.writeText(reservation.matricule)
               }
             >
               <Copy className="mr-2 h-4 w-4" />
-              Copier Matricule
+              Copier le matricule
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -153,6 +199,7 @@ export const columns: ColumnDef<Reservations>[] = [
     },
   },
 ];
+
 const ReservationsPage = () => {
   const [reservations, setReservations] = useState<Reservations[]>([]);
   // // const [error, setError] = useState<string | null>(null);
@@ -209,8 +256,8 @@ const ReservationsPage = () => {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.myreservations) {
-          setReservations(data.myreservations); // Update state with fetched data
+        if (data.data_items) {
+          setReservations(data.data_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
@@ -233,7 +280,21 @@ const ReservationsPage = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  // Récupérer les champs sélectionnés de localStorage lors du chargement
+  useEffect(() => {
+    const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
+    if (savedVisibility) {
+      setColumnVisibility(JSON.parse(savedVisibility));
+    }
+  }, []);
 
+  // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
+  useEffect(() => {
+    localStorage.setItem(
+      `columnVisibility-${tableId}`,
+      JSON.stringify(columnVisibility)
+    );
+  }, [columnVisibility]);
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page
@@ -279,9 +340,9 @@ const ReservationsPage = () => {
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
           <Link to="/reservations/create">
-          <Button className="w-full" variant="outline">
-            Nouveau
-          </Button>
+            <Button className="w-full" variant="outline">
+              Nouveau
+            </Button>
           </Link>
 
           <div>

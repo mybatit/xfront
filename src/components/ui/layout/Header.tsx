@@ -169,7 +169,7 @@ const Header = () => {
         { label: "Formalirers", path: "/formalirers" },
         { label: "Types des réservations", path: "/types-des-reservations" },
         { label: "Types d'activités", path: "#" },
-        { label: "États de réservation", path: "#" },
+        { label: "États de réservation", path: "/etats-des-reservations" },
       ],
     },
     {

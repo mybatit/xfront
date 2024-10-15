@@ -38,10 +38,9 @@ import {
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
 import { PaginationState } from "@/types/types";
-import { Link } from "react-router-dom";
 
 // Utiliser un identifiant unique pour chaque table
-const tableId = "privileges";
+const tableId = "etatsDesReservations";
 function convertDateFormat(dateString: string): string {
   const date = new Date(dateString);
 
@@ -57,124 +56,144 @@ function convertDateFormat(dateString: string): string {
   // Retourner le format souhaité
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
-
-interface Privilege {
-  id: number;
-  created_at: string;
-  updated_at: string;
-  name: string;
-  description: string | null;
-  account_id: number;
-  created_by: number;
-  code_objects_id: number;
-  code_synchronisation_id: number;
-  deleted_at: string | null;
-  deleted: number;
-  deleted_by: number | null;
-  restored_at: string | null;
-  restored: number;
-  restored_by: number | null;
-  account_name: string;
-}
-
-const columns: ColumnDef<Privilege>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Nom",
-  },
-  {
-    accessorKey: "account_name",
-    header: "Nom du compte",
-  },
-  {
-    accessorKey: "created_at",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Créé_à
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ getValue }) => {
-      const dateStr = getValue<string>();
-      return convertDateFormat(dateStr); // Customize this function to format the date
+interface EtatsDesReservations {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    name: string;
+    description: string | null;
+    account_id: number;
+    created_by: number;
+    code_objects_id: number;
+    code_synchronisations_id: number;
+    deleted_at: string | null;
+    deleted: boolean | number;
+    deleted_by: number | null;
+    restored_at: string | null;
+    restored: boolean | number;
+    restored_by: number | null;
+  }
+  
+  
+const columns: ColumnDef<EtatsDesReservations>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
     },
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const user = row.original; // Access the original row data
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.name)}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copier le nom
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Eye className="mr-2 h-4 w-4" />
-              View details
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Trash2 className="mr-2 h-4 w-4" />
-              Supprimer
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+    {
+      accessorKey: "id",
+      header: "ID",
     },
-  },
-];
+    {
+      accessorKey: "name",
+      header: "Nom",
+    },
+    {
+      accessorKey: "account_id",
+      header: "ID du compte",
+    },
+    {
+      accessorKey: "created_at",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Créé le
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ getValue }) => {
+        const dateStr = getValue<string>();
+        return convertDateFormat(dateStr); // Format the date if necessary
+      },
+    },
+    {
+      accessorKey: "updated_at",
+      header: "Mis à jour le",
+      cell: ({ getValue }) => {
+        const dateStr = getValue<string>();
+        return convertDateFormat(dateStr); // Format the date if necessary
+      },
+    },
+    {
+      accessorKey: "code_objects_id",
+      header: "ID de l'objet",
+    },
+    {
+      accessorKey: "deleted",
+      header: "Supprimé",
+      cell: ({ getValue }) => {
+        const isDeleted = getValue<number>();
+        return isDeleted ? "Oui" : "Non";
+      },
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+  
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(item.id.toString())}
+              >
+                <Copy className="mr-2 h-4 w-4" />
+                Copier l'ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Eye className="mr-2 h-4 w-4" />
+                Voir les détails
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Trash2 className="mr-2 h-4 w-4" />
+                Supprimer
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+  
 
-
-
-const PriviligesPage = () => {
-  const [privileges, setPrivileges] = useState<Privilege[]>([]);
+const EtatsDesReservationsPage = () => {
+  const [etatsDesReservations, setEtatsDesReservations] = useState<EtatsDesReservations[]>([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const [decodedToken, setDecodedToken] = useState(null);
   const [token, settoken] = useState(""); // Add loading state
-  console.log(loading);
-
 
   useEffect(() => {
     // Check for token in local storage
@@ -186,7 +205,7 @@ const PriviligesPage = () => {
         const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
         // Set user information based on decoded token
-        console.log("Decoded Token:", decodedToken);
+        // console.log("Decoded Token:", decodedToken);
         setDecodedToken(decodedToken);
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -198,19 +217,19 @@ const PriviligesPage = () => {
     }
     setLoading(false); // Set loading to false after checking token
   }, [navigate]);
+  // console.log(token);
+  console.log(decodedToken);
+  console.log(loading);
 
-  console.log("data user Decoded", decodedToken);
-  // console.log("token", token);
   useEffect(() => {
     setLoading(true);
     // setError(null);
 
-    const fetchusers = async () => {
+    const fetchaccounts = async () => {
       try {
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/privileges`,
+          `http://xapi.vengoreserve.com/api/view/reservations-statuses`,
           {
-            method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -218,29 +237,29 @@ const PriviligesPage = () => {
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch privileges");
+          console.log("response ", response);
+          throw new Error("Failed to fetch etatsDesReservations");
         }
 
         const data = await response.json();
         console.log("data :", data);
         if (data.data_items) {
-          setPrivileges(data.data_items); // Update state with fetched data
+          setEtatsDesReservations(data.data_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching privileges:", error);
-        // setError("Failed to load privileges. Please try again later.");
+        console.error("Error fetching etatsDesReservations:", error);
+        // setError("Failed to load etatsDesReservations. Please try again later.");
         setLoading(false);
       }
     };
 
-    fetchusers();
+    fetchaccounts();
   }, [token]);
 
+  console.log("etatsDesReservations :", etatsDesReservations);
 
-
-  console.log("privileges :", privileges);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -271,7 +290,7 @@ const PriviligesPage = () => {
   });
 
   const table = useReactTable({
-    data: privileges,
+    data: etatsDesReservations,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -290,7 +309,6 @@ const PriviligesPage = () => {
       pagination, // Include pagination state
     },
   });
-
   return (
     <div className="flex flex-col ">
       {/* Main Content */}
@@ -318,9 +336,9 @@ const PriviligesPage = () => {
             </Select>
           </div> */}
 
-          <h3 className="font-bold mb-2">Recherche privilege</h3>
+          <h3 className="font-bold mb-2">Recherche type</h3>
           <Input
-            placeholder="Rechercher par nom..."
+            placeholder="Rechercher par mon..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
@@ -330,11 +348,9 @@ const PriviligesPage = () => {
           <Button className="w-full mb-2 bg-sky-500 hover:bg-sky-600">
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
-          <Link to="/privileges/create">
           <Button className="w-full" variant="outline">
             Nouveau
           </Button>
-          </Link>
 
           <div>
             <h3 className="mb-2 font-medium">Export</h3>
@@ -349,7 +365,7 @@ const PriviligesPage = () => {
           <div className="flex flex-col lg:flex-row items-center py-2">
             <header className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                <Users className="mr-2" /> Privileges
+                <Users className="mr-2" /> Etats des reservations
               </h1>
             </header>
             <DropdownMenu>
@@ -438,7 +454,7 @@ const PriviligesPage = () => {
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Aucun Role trouvé.
+                      Aucun utilisateur trouvé.
                     </TableCell>
                   </TableRow>
                 )}
@@ -476,6 +492,4 @@ const PriviligesPage = () => {
   );
 };
 
-export default PriviligesPage;
-
-
+export default EtatsDesReservationsPage

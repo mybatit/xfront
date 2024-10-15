@@ -56,10 +56,13 @@ function convertDateFormat(dateString: string): string {
 }
 const columns: ColumnDef<Vehicules>[] = [
   {
-    id: 'select',
+    id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
@@ -75,34 +78,29 @@ const columns: ColumnDef<Vehicules>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'brand',
-    header: 'Marque',
+    accessorKey: "brand",
+    header: "Brand",
   },
   {
-    accessorKey: 'model',
-    header: 'Modèle',
+    accessorKey: "model",
+    header: "Model",
   },
   {
-    accessorKey: 'year',
-    header: 'Année',
+    accessorKey: "matricule",
+    header: "Matricule",
   },
   {
-    accessorKey: 'color',
-    header: 'Couleur',
+    accessorKey: "vin",
+    header: "VIN",
   },
   {
-    accessorKey: 'mileage',
-    header: 'Kilométrage',
-  },
-  {
-    accessorKey: 'price',
-    header: 'Prix',
-  },
-  {
-    accessorKey: 'created_at',
+    accessorKey: "created_at",
     header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-        Créé à
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Créé_à
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
@@ -112,25 +110,39 @@ const columns: ColumnDef<Vehicules>[] = [
     },
   },
   {
-    id: 'actions',
-    header: 'Actions',
+    accessorKey: "account_name",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Nom du compte
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    id: "actions",
+    header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const vehicle = row.original;
+      const item = row.original;
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Ouvrir le menu</span>
+              <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(vehicle.vin)}>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(item.matricule)}
+            >
               <Copy className="mr-2 h-4 w-4" />
-              Copier le VIN
+              Copier le matricule
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -147,6 +159,7 @@ const columns: ColumnDef<Vehicules>[] = [
     },
   },
 ];
+
 
 const VehiculesPage = () => {
     const [vehicles, setVehicles] = useState<Vehicules[]>([]);
@@ -205,8 +218,8 @@ const VehiculesPage = () => {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.myvehicles) {
-          setVehicles(data.myvehicles); // Update state with fetched data
+        if (data.data_items) {
+          setVehicles(data.data_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
@@ -264,10 +277,10 @@ const VehiculesPage = () => {
 
       <h3 className="font-bold mb-2">Recherche Vehicule</h3>
       <Input
-        placeholder="Rechercher par e-mails..."
-        value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+        placeholder="Rechercher par marque..."
+        value={(table.getColumn("brand")?.getFilterValue() as string) ?? ""}
         onChange={(event) =>
-          table.getColumn("email")?.setFilterValue(event.target.value)
+          table.getColumn("brand")?.setFilterValue(event.target.value)
         }
         className="mb-2 bg-white"
       />

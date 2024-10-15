@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +27,34 @@ export default function CreateUtilisateursPage() {
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
   const [accountId, setAccountId] = useState<string>("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  const [decodedToken, setDecodedToken] = useState(null);
+  const [token, settoken] = useState(""); // Add loading state
+
+  useEffect(() => {
+    // Check for token in local storage
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        settoken(token);
+        // Deserialize the JWT token
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+        // Set user information based on decoded token
+        setDecodedToken(decodedToken);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        // Handle token decoding errors (e.g., invalid token)
+        localStorage.removeItem("token"); // Clear invalid token
+      }
+    } else {
+      navigate("/login");
+    }
+    setLoading(false); // Set loading to false after checking token
+  }, [navigate]);
+  console.log("Decoded Token:", decodedToken);
+  console.log("loading:", loading);
 
   // Typage du gestionnaire de soumission
   // const handleSubmit = (e: React.FormEvent) => {
@@ -43,29 +71,34 @@ export default function CreateUtilisateursPage() {
   // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const formData: FormData = {
       email,
       password,
       password_confirmation: passwordConfirmation,
       account_id: parseInt(accountId, 10),
     };
-  
+
     try {
-    console.log("Form submitted", formData);
-      const response = await fetch(`http://xapi.vengoreserve.com/api/create/user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  console.log("response :", response);
-  
+      console.log("Form submitted", formData);
+      console.log("token", token);
+      const response = await fetch(
+        `http://xapi.vengoreserve.com/api/create/user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      console.log("response :", response);
+
       if (!response.ok) {
         throw new Error("Erreur lors de la soumission du formulaire");
       }
-  
+
       const data = await response.json();
       console.log("Réponse de l'API:", data);
       navigate("/utilisateurs");
@@ -76,7 +109,7 @@ export default function CreateUtilisateursPage() {
       // Vous pouvez gérer l'erreur ici (affichage d'un message d'erreur à l'utilisateur).
     }
   };
-  
+
   return (
     <div className="flex flex-col max-h-screen ">
       <div className="flex flex-1 flex-col lg:flex-row ">

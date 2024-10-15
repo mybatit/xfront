@@ -51,24 +51,24 @@ export interface Reservations {
     brand: string;
     model: string;
     matricule: string;
-    year: number | null;  // 'year' peut être un nombre ou null
-    color: string | null;  // 'color' peut être une chaîne ou null
+    year: number | null;
+    color: string | null;
     vin: string;
-    mileage: number | null;  // 'mileage' peut être un nombre ou null
-    price: number | null;  // 'price' peut être un nombre ou null
-    description: string | null;  // 'description' peut être une chaîne ou null
+    mileage: number | null;
+    price: number | null;
+    description: string | null;
     created_by: number;
     account_id: number;
     code_objects_id: number;
     code_synchronisation_id: number;
-    deleted_at: string | null;  // 'deleted_at' peut être une chaîne ou null
+    deleted_at: string | null;
     deleted: number;
-    deleted_by: number | null;  // 'deleted_by' peut être un nombre ou null
-    restored_at: string | null;  // 'restored_at' peut être une chaîne ou null
+    deleted_by: number | null;
+    restored_at: string | null;
     restored: number;
-    restored_by: number | null;  // 'restored_by' peut être un nombre ou null
-    created_at: string;  // En supposant que c'est une chaîne au format ISO
-    updated_at: string;  // En supposant que c'est une chaîne au format ISO
+    restored_by: number | null;
+    created_at: string;
+    updated_at: string;
   }
 
   // Define pagination state shapes
