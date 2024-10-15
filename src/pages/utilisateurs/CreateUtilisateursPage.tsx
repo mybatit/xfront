@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Définir une interface pour les données du formulaire
 interface FormData {
@@ -26,21 +26,57 @@ export default function CreateUtilisateursPage() {
   const [password, setPassword] = useState<string>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
   const [accountId, setAccountId] = useState<string>("");
+  const navigate = useNavigate();
 
   // Typage du gestionnaire de soumission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
 
+  //   const formData: FormData = {
+  //     email,
+  //     password,
+  //     password_confirmation: passwordConfirmation,
+  //     account_id: parseInt(accountId, 10), // Convertir accountId en nombre
+  //   };
+
+  //   console.log("Form submitted", formData);
+  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
     const formData: FormData = {
       email,
       password,
       password_confirmation: passwordConfirmation,
-      account_id: parseInt(accountId, 10), // Convertir accountId en nombre
+      account_id: parseInt(accountId, 10),
     };
-
+  
+    try {
     console.log("Form submitted", formData);
-  };
+      const response = await fetch(`http://xapi.vengoreserve.com/api/create/user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  console.log("response :", response);
+  
+      if (!response.ok) {
+        throw new Error("Erreur lors de la soumission du formulaire");
+      }
+  
+      const data = await response.json();
+      console.log("Réponse de l'API:", data);
+      navigate("/utilisateurs");
 
+      // Vous pouvez ajouter un message de succès ou rediriger l'utilisateur après la soumission réussie.
+    } catch (error) {
+      console.error("Erreur:", error);
+      // Vous pouvez gérer l'erreur ici (affichage d'un message d'erreur à l'utilisateur).
+    }
+  };
+  
   return (
     <div className="flex flex-col max-h-screen ">
       <div className="flex flex-1 flex-col lg:flex-row ">
