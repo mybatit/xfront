@@ -12,6 +12,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Account, ReservationsType, Vehicules } from "@/types/types";
 // import Link from "next/link"
 
 interface FormData {
@@ -58,6 +59,121 @@ export default function ReservationsCreatePage() {
     }
     setLoading(false);
   }, [navigate]);
+
+  const [comptes, setComptes] = useState<Account[]>([]);
+  useEffect(() => {
+    setLoading(true);
+    const fetchaccounts = async () => {
+      try {
+        const response = await fetch(
+          `http://xapi.vengoreserve.com/api/view/accounts`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          console.log("response: ", response);
+          throw new Error("Failed to fetch comptes");
+        }
+
+        const data = await response.json();
+        console.log("data: ", data);
+        console.log("data.myaccounts: ", data.myaccounts);
+        // console.log("data.$myaccounts: ", data.$myaccounts);
+
+        if (data.myaccounts) {
+          setComptes(data.myaccounts); // Update state with fetched data
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching comptes:", error);
+        setLoading(false);
+      }
+    };
+    fetchaccounts();
+  }, [token]);
+
+
+  const [reservationsTypes, setReservationsTypes] = useState<ReservationsType[]>([]);
+  useEffect(() => {
+    setLoading(true);
+    // setError(null);
+
+    const fetchaccounts = async () => {
+      try {
+        const response = await fetch(
+          `http://xapi.vengoreserve.com/api/view/reservations-types`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          console.log("response ", response);
+          throw new Error("Failed to fetch reservationsTypes");
+        }
+
+        const data = await response.json();
+        console.log("data :", data);
+        if (data.data_items) {
+          setReservationsTypes(data.data_items); // Update state with fetched data
+          // setError(null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching reservationsTypes:", error);
+        // setError("Failed to load reservationsTypes. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchaccounts();
+  }, [token]);
+
+
+  const [vehicles, setVehicles] = useState<Vehicules[]>([]);
+  useEffect(() => {
+    setLoading(true);
+    // setError(null);
+
+    const fetchvehicles = async () => {
+      try {
+        
+        const response = await fetch(
+          `http://xapi.vengoreserve.com/api/view/vehicles`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch vehicles");
+        }
+
+        const data = await response.json();
+        console.log("data :", data);
+        if (data.data_items) {
+          setVehicles(data.data_items); // Update state with fetched data
+          // setError(null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+        // setError("Failed to load vehicles. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchvehicles();
+  }, [token]);
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -187,9 +303,11 @@ export default function ReservationsCreatePage() {
                     <SelectValue placeholder="Sélectionnez le nom du compte" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Compte 1</SelectItem>
-                    <SelectItem value="2">Compte 2</SelectItem>
-                    <SelectItem value="6">Compte 6</SelectItem>
+                    {comptes.map((compte, index) => (
+                      <SelectItem key={index} value={compte.id.toString()}>
+                        {compte.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -210,9 +328,11 @@ export default function ReservationsCreatePage() {
                     <SelectValue placeholder="Sélectionnez le type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="11">Type 11</SelectItem>
-                    <SelectItem value="2">Type 2</SelectItem>
-                    <SelectItem value="3">Type 3</SelectItem>
+                  {reservationsTypes.map((compte, index) => (
+                      <SelectItem key={index} value={compte.id.toString()}>
+                        {compte.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -233,9 +353,11 @@ export default function ReservationsCreatePage() {
                     <SelectValue placeholder="Sélectionnez le véhicule" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Véhicule 1</SelectItem>
-                    <SelectItem value="2">Véhicule 2</SelectItem>
-                    <SelectItem value="35">Véhicule 35</SelectItem>
+                  {vehicles.map((compte, index) => (
+                      <SelectItem key={index} value={compte.id.toString()}>
+                        {compte.brand} ( {compte.model})
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

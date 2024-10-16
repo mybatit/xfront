@@ -37,7 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
-import { PaginationState } from "@/types/types";
+import { PaginationState, ReservationsType } from "@/types/types";
 
 // Utiliser un identifiant unique pour chaque table
 const tableId = "typesDesReservations";
@@ -56,26 +56,7 @@ function convertDateFormat(dateString: string): string {
   // Retourner le format souhaité
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
-interface ReservationsType {
-  form_id: number;
-  id: number;
-  created_at: string; // ou Date si vous préférez manipuler des objets Date
-  updated_at: string; // ou Date
-  name: string;
-  description: string;
-  account_id: number;
-  created_by: number;
-  deleted_at: string | null; // ou Date | null si vous préférez Date
-  deleted: number;
-  deleted_by: number | null;
-  restored_at: string | null; // ou Date | null
-  restored: number;
-  restored_by: number | null;
-  code_objects: string;
-  code_synchronisations: string;
-  code_unique_id: number;
-  account_name: string;
-}
+
 const columns: ColumnDef<ReservationsType>[] = [
   {
     id: "select",
@@ -183,9 +164,7 @@ const columns: ColumnDef<ReservationsType>[] = [
 ];
 
 const TypesDesReservationsPage = () => {
-  const [reservationsTypes, setReservationsTypes] = useState<
-    ReservationsType[]
-  >([]);
+  const [reservationsTypes, setReservationsTypes] = useState<ReservationsType[]>([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();

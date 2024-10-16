@@ -41,7 +41,26 @@ export interface Reservations {
     updated_at: string;
     vehicle_id: number;
   };
-
+  export interface ReservationsType {
+    form_id: number;
+    id: number;
+    created_at: string; // ou Date si vous préférez manipuler des objets Date
+    updated_at: string; // ou Date
+    name: string;
+    description: string;
+    account_id: number;
+    created_by: number;
+    deleted_at: string | null; // ou Date | null si vous préférez Date
+    deleted: number;
+    deleted_by: number | null;
+    restored_at: string | null; // ou Date | null
+    restored: number;
+    restored_by: number | null;
+    code_objects: string;
+    code_synchronisations: string;
+    code_unique_id: number;
+    account_name: string;
+  }
   export interface User {
     id: number;
     name: string;
