@@ -1,3 +1,22 @@
+export interface Account {
+  id: number;
+  name: string;
+  description: string | null;
+  parent: number;
+  creator: number;
+  pilot: number;
+  code_objects_id: number;
+  code_synchronisation_id: number;
+  deleted_at: string | null;
+  deleted: number;
+  deleted_by: number;
+  created_by: number | null;
+  restored: number;
+  restored_by: number;
+  created_at: string;
+  updated_at: string;
+  pilot_name: string | null;
+}
 export interface Reservations {
     id: number;
     id_matricule: string;

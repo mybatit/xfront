@@ -37,27 +37,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
-import { PaginationState } from "@/types/types";
+import { Account, PaginationState } from "@/types/types";
 
-export interface Account {
-  id: number;
-  name: string;
-  description: string | null;
-  parent: number;
-  creator: number;
-  pilot: number;
-  code_objects_id: number;
-  code_synchronisation_id: number;
-  deleted_at: string | null;
-  deleted: number;
-  deleted_by: number;
-  created_by: number | null;
-  restored: number;
-  restored_by: number;
-  created_at: string;
-  updated_at: string;
-  pilot_name: string | null;
-}
+
 
 // Utiliser un identifiant unique pour chaque table
 const tableId = "comptes";

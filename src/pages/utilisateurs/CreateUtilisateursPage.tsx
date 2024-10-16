@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 
 import { Link, useNavigate } from "react-router-dom";
+import { Account } from "@/types/types";
 
 // Définir une interface pour les données du formulaire
 interface FormData {
@@ -28,6 +29,7 @@ export default function CreateUtilisateursPage() {
   const [accountId, setAccountId] = useState<string>("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [comptes, setComptes] = useState<Account[]>([]);
 
   const [decodedToken, setDecodedToken] = useState(null);
   const [token, settoken] = useState(""); // Add loading state
@@ -56,19 +58,44 @@ export default function CreateUtilisateursPage() {
   console.log("Decoded Token:", decodedToken);
   console.log("loading:", loading);
 
-  // Typage du gestionnaire de soumission
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
+  useEffect(() => {
+    setLoading(true);
 
-  //   const formData: FormData = {
-  //     email,
-  //     password,
-  //     password_confirmation: passwordConfirmation,
-  //     account_id: parseInt(accountId, 10), // Convertir accountId en nombre
-  //   };
+    const fetchaccounts = async () => {
+      try {
+        const response = await fetch(
+          `http://xapi.vengoreserve.com/api/view/accounts`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  //   console.log("Form submitted", formData);
-  // };
+        if (!response.ok) {
+          console.log("response: ", response);
+          throw new Error("Failed to fetch comptes");
+        }
+
+        
+        const data = await response.json();
+        console.log("data: ", data);
+        console.log("data.myaccounts: ", data.myaccounts);
+        // console.log("data.$myaccounts: ", data.$myaccounts);
+
+        if (data.myaccounts) {
+          setComptes(data.myaccounts); // Update state with fetched data
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching comptes:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchaccounts();
+  }, [token]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -202,9 +229,9 @@ export default function CreateUtilisateursPage() {
                     <SelectValue placeholder="Sélectionnez le compte" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="7">Compte 7</SelectItem>
-                    <SelectItem value="8">Compte 8</SelectItem>
-                    <SelectItem value="9">Compte 9</SelectItem>
+                    {comptes.map((compte,index)=>(
+                      <SelectItem key={index} value={compte.id.toString()}>{compte.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
