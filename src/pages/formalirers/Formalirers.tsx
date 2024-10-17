@@ -58,24 +58,23 @@ function convertDateFormat(dateString: string): string {
 }
 
 interface Formalirer {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    name: string;
-    description: string | null;
-    created_by: number;
-    account_id: number;
-    deleted_at: string | null;
-    deleted: number;
-    deleted_by: number | null;
-    restored_at: string | null;
-    restored: number;
-    restored_by: number | null;
-    code_objects: string;
-    code_synchronisations: string;
-    code_unique_id: number;
-  }
-  
+  id: number;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  description: string | null;
+  created_by: number;
+  account_id: number;
+  deleted_at: string | null;
+  deleted: number;
+  deleted_by: number | null;
+  restored_at: string | null;
+  restored: number;
+  restored_by: number | null;
+  code_objects: string;
+  code_synchronisations: string;
+  code_unique_id: number;
+}
 
 const Formalirers = () => {
   const [formalirers, setFormalirers] = useState<Formalirer[]>([]);
@@ -118,7 +117,6 @@ const Formalirers = () => {
 
     const fetchaccounts = async () => {
       try {
-        
         const response = await fetch(
           `http://xapi.vengoreserve.com/api/view/forms`,
           {
@@ -130,7 +128,7 @@ const Formalirers = () => {
         );
 
         if (!response.ok) {
-          console.log("response " ,response);
+          console.log("response ", response);
           throw new Error("Failed to fetch formalirers");
         }
 
@@ -220,7 +218,7 @@ const Formalirers = () => {
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
-  
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -301,7 +299,7 @@ const Formalirers = () => {
       rowSelection,
       pagination, // Include pagination state
     },
-  });  
+  });
   return (
     <div className="flex flex-col ">
       {/* Main Content */}
@@ -420,7 +418,7 @@ const Formalirers = () => {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>
@@ -485,5 +483,4 @@ const Formalirers = () => {
   );
 };
 
-
-export default Formalirers
+export default Formalirers;

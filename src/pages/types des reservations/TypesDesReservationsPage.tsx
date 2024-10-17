@@ -164,7 +164,9 @@ const columns: ColumnDef<ReservationsType>[] = [
 ];
 
 const TypesDesReservationsPage = () => {
-  const [reservationsTypes, setReservationsTypes] = useState<ReservationsType[]>([]);
+  const [reservationsTypes, setReservationsTypes] = useState<
+    ReservationsType[]
+  >([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -404,7 +406,7 @@ const TypesDesReservationsPage = () => {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>

@@ -399,7 +399,7 @@ export default function UtilisateursPage() {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>

@@ -172,7 +172,6 @@ const columns: ColumnDef<Role>[] = [
   },
 ];
 
-
 const RolesPage = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   // // const [error, setError] = useState<string | null>(null);
@@ -182,7 +181,6 @@ const RolesPage = () => {
   const [decodedToken, setDecodedToken] = useState(null);
   const [token, settoken] = useState(""); // Add loading state
   console.log(loading);
-
 
   useEffect(() => {
     // Check for token in local storage
@@ -245,8 +243,6 @@ const RolesPage = () => {
 
     fetchusers();
   }, [token]);
-
-
 
   console.log("Roles :", roles);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -339,9 +335,9 @@ const RolesPage = () => {
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
           <Link to="/roles/create">
-          <Button className="w-full" variant="outline">
-            Nouveau
-          </Button>
+            <Button className="w-full" variant="outline">
+              Nouveau
+            </Button>
           </Link>
 
           <div>
@@ -419,7 +415,7 @@ const RolesPage = () => {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>
@@ -485,5 +481,3 @@ const RolesPage = () => {
 };
 
 export default RolesPage;
-
-

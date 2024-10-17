@@ -57,137 +57,137 @@ function convertDateFormat(dateString: string): string {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 interface EtatsDesReservations {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    name: string;
-    description: string | null;
-    account_id: number;
-    created_by: number;
-    code_objects_id: number;
-    code_synchronisations_id: number;
-    deleted_at: string | null;
-    deleted: boolean | number;
-    deleted_by: number | null;
-    restored_at: string | null;
-    restored: boolean | number;
-    restored_by: number | null;
-  }
-  
-  
+  id: number;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  description: string | null;
+  account_id: number;
+  created_by: number;
+  code_objects_id: number;
+  code_synchronisations_id: number;
+  deleted_at: string | null;
+  deleted: boolean | number;
+  deleted_by: number | null;
+  restored_at: string | null;
+  restored: boolean | number;
+  restored_by: number | null;
+}
+
 const columns: ColumnDef<EtatsDesReservations>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
+    accessorKey: "name",
+    header: "Nom",
+  },
+  {
+    accessorKey: "account_id",
+    header: "ID du compte",
+  },
+  {
+    accessorKey: "created_at",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Créé le
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ getValue }) => {
+      const dateStr = getValue<string>();
+      return convertDateFormat(dateStr); // Format the date if necessary
     },
-    {
-      accessorKey: "id",
-      header: "ID",
+  },
+  {
+    accessorKey: "updated_at",
+    header: "Mis à jour le",
+    cell: ({ getValue }) => {
+      const dateStr = getValue<string>();
+      return convertDateFormat(dateStr); // Format the date if necessary
     },
-    {
-      accessorKey: "name",
-      header: "Nom",
+  },
+  {
+    accessorKey: "code_objects_id",
+    header: "ID de l'objet",
+  },
+  {
+    accessorKey: "deleted",
+    header: "Supprimé",
+    cell: ({ getValue }) => {
+      const isDeleted = getValue<number>();
+      return isDeleted ? "Oui" : "Non";
     },
-    {
-      accessorKey: "account_id",
-      header: "ID du compte",
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const item = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(item.id.toString())}
+            >
+              <Copy className="mr-2 h-4 w-4" />
+              Copier l'ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <Eye className="mr-2 h-4 w-4" />
+              Voir les détails
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Supprimer
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
-    {
-      accessorKey: "created_at",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Créé le
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ getValue }) => {
-        const dateStr = getValue<string>();
-        return convertDateFormat(dateStr); // Format the date if necessary
-      },
-    },
-    {
-      accessorKey: "updated_at",
-      header: "Mis à jour le",
-      cell: ({ getValue }) => {
-        const dateStr = getValue<string>();
-        return convertDateFormat(dateStr); // Format the date if necessary
-      },
-    },
-    {
-      accessorKey: "code_objects_id",
-      header: "ID de l'objet",
-    },
-    {
-      accessorKey: "deleted",
-      header: "Supprimé",
-      cell: ({ getValue }) => {
-        const isDeleted = getValue<number>();
-        return isDeleted ? "Oui" : "Non";
-      },
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const item = row.original;
-  
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(item.id.toString())}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                Copier l'ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Eye className="mr-2 h-4 w-4" />
-                Voir les détails
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Trash2 className="mr-2 h-4 w-4" />
-                Supprimer
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-  ];
-  
+  },
+];
 
 const EtatsDesReservationsPage = () => {
-  const [etatsDesReservations, setEtatsDesReservations] = useState<EtatsDesReservations[]>([]);
+  const [etatsDesReservations, setEtatsDesReservations] = useState<
+    EtatsDesReservations[]
+  >([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -427,7 +427,7 @@ const EtatsDesReservationsPage = () => {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>
@@ -492,4 +492,4 @@ const EtatsDesReservationsPage = () => {
   );
 };
 
-export default EtatsDesReservationsPage
+export default EtatsDesReservationsPage;

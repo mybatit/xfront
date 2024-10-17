@@ -182,9 +182,7 @@ const columns: ColumnDef<VehiculesAvecReservations>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={
-                () => navigator.clipboard.writeText(vehicle.vin)
-              }
+              onClick={() => navigator.clipboard.writeText(vehicle.vin)}
             >
               <Copy className="mr-2 h-4 w-4" />
               Copier VIN
@@ -206,7 +204,9 @@ const columns: ColumnDef<VehiculesAvecReservations>[] = [
 ];
 
 export default function VehiculesAvecReservations() {
-  const [vehiculesAvecReservations, setVehiculesAvecReservations] = useState<VehiculesAvecReservations[]>([]);
+  const [vehiculesAvecReservations, setVehiculesAvecReservations] = useState<
+    VehiculesAvecReservations[]
+  >([]);
   // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -353,7 +353,9 @@ export default function VehiculesAvecReservations() {
             </Select>
           </div> */}
 
-          <h3 className="font-bold mb-2">Recherche vehicules avec reservation</h3>
+          <h3 className="font-bold mb-2">
+            Recherche vehicules avec reservation
+          </h3>
           <Input
             placeholder="Rechercher par marque..."
             value={(table.getColumn("brand")?.getFilterValue() as string) ?? ""}
@@ -366,9 +368,9 @@ export default function VehiculesAvecReservations() {
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
           <Link to="/vehicules-avec-reservations/create">
-          <Button className="w-full" variant="outline">
-            Nouveau
-          </Button>
+            <Button className="w-full" variant="outline">
+              Nouveau
+            </Button>
           </Link>
 
           <div>
@@ -446,7 +448,7 @@ export default function VehiculesAvecReservations() {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>
@@ -520,8 +522,3 @@ export default function VehiculesAvecReservations() {
 //     className="w-6 h-6 rounded-full"
 //   />
 // )}
-
-
-
-
-

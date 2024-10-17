@@ -39,8 +39,6 @@ import {
 import Loader from "@/components/ui/Elements/Loader";
 import { Account, PaginationState } from "@/types/types";
 
-
-
 // Utiliser un identifiant unique pour chaque table
 const tableId = "comptes";
 function convertDateFormat(dateString: string): string {
@@ -135,7 +133,9 @@ const columns: ColumnDef<Account>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(item.name)}>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(item.name)}
+            >
               <Copy className="mr-2 h-4 w-4" />
               Copier le nom
             </DropdownMenuItem>
@@ -209,7 +209,6 @@ const ComptesPage = () => {
           throw new Error("Failed to fetch comptes");
         }
 
-        
         const data = await response.json();
         console.log("data: ", data);
         console.log("data.myaccounts: ", data.myaccounts);
@@ -228,10 +227,8 @@ const ComptesPage = () => {
     fetchaccounts();
   }, [token]);
 
-
   console.log("Comptes :", comptes);
 
-  
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -240,21 +237,21 @@ const ComptesPage = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-    // Récupérer les champs sélectionnés de localStorage lors du chargement
-    useEffect(() => {
-      const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
-      if (savedVisibility) {
-        setColumnVisibility(JSON.parse(savedVisibility));
-      }
-    }, []);
-  
-    // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
-    useEffect(() => {
-      localStorage.setItem(
-        `columnVisibility-${tableId}`,
-        JSON.stringify(columnVisibility)
-      );
-    }, [columnVisibility]);
+  // Récupérer les champs sélectionnés de localStorage lors du chargement
+  useEffect(() => {
+    const savedVisibility = localStorage.getItem(`columnVisibility-${tableId}`);
+    if (savedVisibility) {
+      setColumnVisibility(JSON.parse(savedVisibility));
+    }
+  }, []);
+
+  // Enregistrer les boîtes sélectionnées dans localStorage une fois modifiées
+  useEffect(() => {
+    localStorage.setItem(
+      `columnVisibility-${tableId}`,
+      JSON.stringify(columnVisibility)
+    );
+  }, [columnVisibility]);
   // Pagination state
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0, // Start at the first page
@@ -399,7 +396,7 @@ const ComptesPage = () => {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>
@@ -465,4 +462,3 @@ const ComptesPage = () => {
 };
 
 export default ComptesPage;
-

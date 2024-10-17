@@ -365,8 +365,8 @@ const VehiculesPage = () => {
             {loading ? (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
-                  className="h-24 flex items-center justify-center"
+                      colSpan={columns.length}
+                      className="h-24 text-center"
                 >
                   <Loader />
                 </TableCell>
