@@ -196,7 +196,7 @@ const PriviligesPage = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
 
   console.log("data user Decoded", decodedToken);
@@ -231,7 +231,7 @@ const PriviligesPage = () => {
       } catch (error) {
         console.error("Error fetching privileges:", error);
         // setError("Failed to load privileges. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -411,7 +411,7 @@ const PriviligesPage = () => {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 flex items-center justify-center"
+                      className="h-24 text-center"
                     >
                       <Loader />
                     </TableCell>

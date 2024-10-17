@@ -189,7 +189,6 @@ export default function UtilisateursPage() {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
   }, [navigate]);
 
   console.log("data user Decoded", decodedToken);
@@ -197,7 +196,6 @@ export default function UtilisateursPage() {
   useEffect(() => {
     setLoading(true);
     // setError(null);
-
     const fetchusers = async () => {
       try {
         const response = await fetch(
@@ -224,7 +222,7 @@ export default function UtilisateursPage() {
       } catch (error) {
         console.error("Error fetching users:", error);
         // setError("Failed to load users. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -321,9 +319,9 @@ export default function UtilisateursPage() {
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
           <Link to="/utilisateurs/create">
-          <Button className="w-full" variant="outline">
-            Nouveau
-          </Button>
+            <Button className="w-full" variant="outline">
+              Nouveau
+            </Button>
           </Link>
 
           <div>
@@ -406,7 +404,7 @@ export default function UtilisateursPage() {
                       <Loader />
                     </TableCell>
                   </TableRow>
-                ) : table.getRowModel().rows?.length ? (
+                ) : users.length > 0 ? ( // Vérifiez si des utilisateurs existent
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}

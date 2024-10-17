@@ -49,7 +49,7 @@ const ComptesPage = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
   // console.log(token);
   console.log(decodedToken);
@@ -97,7 +97,7 @@ const ComptesPage = () => {
       } catch (error) {
         console.error("Error fetching accounts:", error);
         // setError("Failed to load accounts. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

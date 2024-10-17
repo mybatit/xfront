@@ -90,7 +90,7 @@ export default function ReservationsCreatePage() {
         }
       } catch (error) {
         console.error("Error fetching comptes:", error);
-        setLoading(false);
+        // setLoading(false);
       }
     };
     fetchaccounts();
@@ -128,7 +128,7 @@ export default function ReservationsCreatePage() {
       } catch (error) {
         console.error("Error fetching reservationsTypes:", error);
         // setError("Failed to load reservationsTypes. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -167,7 +167,7 @@ export default function ReservationsCreatePage() {
       } catch (error) {
         console.error("Error fetching vehicles:", error);
         // setError("Failed to load vehicles. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

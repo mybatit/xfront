@@ -204,7 +204,7 @@ const RolesPage = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
 
   console.log("data user Decoded", decodedToken);
@@ -239,7 +239,7 @@ const RolesPage = () => {
       } catch (error) {
         console.error("Error fetching roles:", error);
         // setError("Failed to load roles. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

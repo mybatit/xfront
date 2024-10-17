@@ -106,7 +106,7 @@ const Formalirers = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
   // console.log(token);
   console.log(decodedToken);
@@ -144,7 +144,7 @@ const Formalirers = () => {
       } catch (error) {
         console.error("Error fetching formalirers:", error);
         // setError("Failed to load formalirers. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

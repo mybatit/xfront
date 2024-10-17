@@ -184,7 +184,7 @@ const ComptesPage = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
   // console.log(token);
   console.log(decodedToken);
@@ -221,7 +221,7 @@ const ComptesPage = () => {
         }
       } catch (error) {
         console.error("Error fetching comptes:", error);
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

@@ -234,7 +234,7 @@ export default function VehiculesAvecReservations() {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
 
   console.log("data user Decoded", decodedToken);
@@ -269,7 +269,7 @@ export default function VehiculesAvecReservations() {
       } catch (error) {
         console.error("Error fetching vehiculesAvecReservations:", error);
         // setError("Failed to load vehiculesAvecReservations. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

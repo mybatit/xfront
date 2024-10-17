@@ -215,7 +215,7 @@ const EtatsDesReservationsPage = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
   // console.log(token);
   console.log(decodedToken);
@@ -251,7 +251,7 @@ const EtatsDesReservationsPage = () => {
       } catch (error) {
         console.error("Error fetching etatsDesReservations:", error);
         // setError("Failed to load etatsDesReservations. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

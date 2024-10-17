@@ -1,55 +1,122 @@
+import { Suspense, lazy } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
-import Login from './pages/Authentication/Login';
-import Error404 from './pages/Authentication/Error404';
-import UtilisateursPage from './pages/utilisateurs/UtilisateursPage';
-import RootLayout from './routes/RootLayout';
-import SynthesePage from './pages/SynthesePage';
-import ComptesPage from './pages/comptes/ComptesPage';
-import RolesPage from './pages/roles/RolesPage';
-import PriviligesPage from './pages/priviliges/PriviligesPage';
-import VehiculesAvecReservations from './pages/vehicles/VehiculesAvecReservations';
-import VehiculesPage from './pages/vehicles/Vehicules';
-import ReservationsPage from './pages/reservations/Reservations';
-import ReservationsCreatePage from './pages/reservations/ReservationsCreatePage';
-import TypesDesReservationsPage from './pages/types des reservations/TypesDesReservationsPage';
-import Formalirers from './pages/formalirers/Formalirers';
-import CreateUtilisateursPage from './pages/utilisateurs/CreateUtilisateursPage';
-import EtatsDesReservationsPage from './pages/etats des reservations/EtatsDesReservationsPage';
+
+// Utilisation de React.lazy pour charger les composants dynamiquement
+const Login = lazy(() => import('./pages/Authentication/Login'));
+const Error404 = lazy(() => import('./pages/Authentication/Error404'));
+const UtilisateursPage = lazy(() => import('./pages/utilisateurs/UtilisateursPage'));
+const RootLayout = lazy(() => import('./routes/RootLayout'));
+const SynthesePage = lazy(() => import('./pages/SynthesePage'));
+const ComptesPage = lazy(() => import('./pages/comptes/ComptesPage'));
+const RolesPage = lazy(() => import('./pages/roles/RolesPage'));
+const PriviligesPage = lazy(() => import('./pages/priviliges/PriviligesPage'));
+const VehiculesAvecReservations = lazy(() => import('./pages/vehicles/VehiculesAvecReservations'));
+const VehiculesPage = lazy(() => import('./pages/vehicles/Vehicules'));
+const ReservationsPage = lazy(() => import('./pages/reservations/Reservations'));
+const ReservationsCreatePage = lazy(() => import('./pages/reservations/ReservationsCreatePage'));
+const TypesDesReservationsPage = lazy(() => import('./pages/types des reservations/TypesDesReservationsPage'));
+const Formalirers = lazy(() => import('./pages/formalirers/Formalirers'));
+const CreateUtilisateursPage = lazy(() => import('./pages/utilisateurs/CreateUtilisateursPage'));
+const EtatsDesReservationsPage = lazy(() => import('./pages/etats des reservations/EtatsDesReservationsPage'));
 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={<SynthesePage />} />
+        {/* Suspense devrait envelopper des composants spécifiques ici */}
+        <Route path="/login" element={
+          <Suspense fallback={<div>Chargement...</div>}>
+            <Login />
+          </Suspense>
+        } />
+        <Route path="/" element={
+          <Suspense fallback={<div>Chargement...</div>}>
+            <RootLayout />
+          </Suspense>
+        }>
+          <Route index element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <SynthesePage />
+            </Suspense>
+          } />
           {/* Administrateur */}
-          <Route path="/utilisateurs" element={<UtilisateursPage />} /> {/* 👍✨*/}
-          <Route path="/utilisateurs/create" element={<CreateUtilisateursPage />} />
-          <Route path="/comptes" element={<ComptesPage />} /> {/* 👍✨*/}
-          <Route path="/roles" element={<RolesPage />} />{/* 👍✨*/}
-          <Route path="/priviliges" element={<PriviligesPage />} />{/* 👍✨*/}
+          <Route path="/utilisateurs" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <UtilisateursPage />
+            </Suspense>
+          } />
+          <Route path="/utilisateurs/create" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <CreateUtilisateursPage />
+            </Suspense>
+          } />
+          <Route path="/comptes" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ComptesPage />
+            </Suspense>
+          } />
+          <Route path="/roles" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <RolesPage />
+            </Suspense>
+          } />
+          <Route path="/priviliges" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <PriviligesPage />
+            </Suspense>
+          } />
           {/* Paramètres */}
-          <Route path="/formalirers" element={<Formalirers />} /> {/* 👍✨*/}
-          <Route path="/types-des-reservations" element={<TypesDesReservationsPage />} /> {/* 👍✨*/}
-          <Route path="/etats-des-reservations" element={<EtatsDesReservationsPage />} /> {/* 👍✨*/}
-          {/* Affichage de la liste des statuts de réservation */} {/* */}
-          <Route path="/reservations" element={<ReservationsPage />} />{/* 👍✨*/}
-
-
-          <Route path="/vehicules" element={<VehiculesPage />} /> {/* 👍✨*/}
-          <Route path="/vehicules-avec-reservations" element={<VehiculesAvecReservations />} />{/* 👍✨*/}
-          <Route path="/reservations/create" element={<ReservationsCreatePage />} />
-          {/* <Route path="/reservations" element={<ReservationsPage />} /> */}
+          <Route path="/formalirers" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <Formalirers />
+            </Suspense>
+          } />
+          <Route path="/types-des-reservations" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <TypesDesReservationsPage />
+            </Suspense>
+          } />
+          <Route path="/etats-des-reservations" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <EtatsDesReservationsPage />
+            </Suspense>
+          } />
+          {/* Réservations */}
+          <Route path="/reservations" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ReservationsPage />
+            </Suspense>
+          } />
+          <Route path="/reservations/create" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ReservationsCreatePage />
+            </Suspense>
+          } />
+          {/* Véhicules */}
+          <Route path="/vehicules" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <VehiculesPage />
+            </Suspense>
+          } />
+          <Route path="/vehicules-avec-reservations" element={
+            <Suspense fallback={<div>Chargement...</div>}>
+              <VehiculesAvecReservations />
+            </Suspense>
+          } />
         </Route>
-        <Route path="/*" element={<Error404 />} />
+        <Route path="/*" element={
+          <Suspense fallback={<div>Chargement...</div>}>
+            <Error404 />
+          </Suspense>
+        } />
       </>
     )
   );
+
   return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
 
 
 // Affichage de la liste des utilisateurs  ✅

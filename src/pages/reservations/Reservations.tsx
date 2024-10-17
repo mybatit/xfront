@@ -229,7 +229,7 @@ const ReservationsPage = () => {
     } else {
       navigate("/login");
     }
-    setLoading(false); // Set loading to false after checking token
+    // setLoading(false); // Set loading to false after checking token
   }, [navigate]);
   // console.log(token);
   console.log(decodedToken);
@@ -264,7 +264,7 @@ const ReservationsPage = () => {
       } catch (error) {
         console.error("Error fetching reservations:", error);
         // setError("Failed to load reservations. Please try again later.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
