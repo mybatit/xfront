@@ -63,26 +63,33 @@ export interface Reservations {
   }
   export interface User {
     id: number;
-    name: string;
+    first_name: string | null;
+    last_name: string | null;
+    username: string;
+    account_name: string;
+    description: string | null;
     email: string;
     email_verified_at: string | null;
     two_factor_confirmed_at: string | null;
-    user_creator: number;
+    created_by: number;
     account_id: number;
     current_team_id: number | null;
     profile_photo_path: string | null;
     created_at: string;
     updated_at: string;
-    id_code_objects: number;
-    id_code_synchronisation: number;
+    role_id: number;
+    code_unique_id: number;
     deleted_at: string | null;
     deleted: number;
-    deleted_by: string | null;
+    deleted_by: number | null;
     restored_at: string | null;
     restored_: number;
-    restored_by: string | null;
+    restored_by: number | null;
+    code_objects: string;
+    code_synchronisations: string;
     profile_photo_url: string;
-  };
+  }
+  
 
   export interface Vehicules {
     id: number;

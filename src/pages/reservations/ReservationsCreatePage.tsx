@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Account, ReservationsType, Vehicules } from "@/types/types";
+// import { Checkbox } from "@/components/ui/checkbox";
+import { Account, ReservationsType, User, Vehicules } from "@/types/types";
 // import Link from "next/link"
-
+import { X, ChevronDown, ChevronUp } from "lucide-react";
 interface FormData {
   description: string;
   account_id: number;
@@ -57,7 +57,6 @@ export default function ReservationsCreatePage() {
     } else {
       navigate("/login");
     }
-    setLoading(false);
   }, [navigate]);
 
   const [comptes, setComptes] = useState<Account[]>([]);
@@ -86,7 +85,7 @@ export default function ReservationsCreatePage() {
 
         if (data.myaccounts) {
           setComptes(data.myaccounts); // Update state with fetched data
-          setLoading(false);
+          // setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching comptes:", error);
@@ -96,6 +95,42 @@ export default function ReservationsCreatePage() {
     fetchaccounts();
   }, [token]);
 
+  const [utilisateurs, setUtilisateurs] = useState<User[]>([]);
+  useEffect(() => {
+    setLoading(true);
+    // setError(null);
+    const fetchusers = async () => {
+      try {
+        const response = await fetch(
+          `http://xapi.vengoreserve.com/api/view/users`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+
+        const data = await response.json();
+        console.log("data :", data);
+        if (data.data_items) {
+          setUtilisateurs(data.data_items); // Update state with fetched data
+          // setError(null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        // setError("Failed to load users. Please try again later.");
+        // setLoading(false);
+      }
+    };
+
+    fetchusers();
+  }, [token]);
 
   const [reservationsTypes, setReservationsTypes] = useState<ReservationsType[]>([]);
   useEffect(() => {
@@ -123,7 +158,7 @@ export default function ReservationsCreatePage() {
         if (data.data_items) {
           setReservationsTypes(data.data_items); // Update state with fetched data
           // setError(null);
-          setLoading(false);
+          // setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching reservationsTypes:", error);
@@ -135,7 +170,6 @@ export default function ReservationsCreatePage() {
     fetchaccounts();
   }, [token]);
 
-
   const [vehicles, setVehicles] = useState<Vehicules[]>([]);
   useEffect(() => {
     setLoading(true);
@@ -143,12 +177,11 @@ export default function ReservationsCreatePage() {
 
     const fetchvehicles = async () => {
       try {
-        
         const response = await fetch(
           `http://xapi.vengoreserve.com/api/view/vehicles`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -162,7 +195,7 @@ export default function ReservationsCreatePage() {
         if (data.data_items) {
           setVehicles(data.data_items); // Update state with fetched data
           // setError(null);
-          setLoading(false);
+          // setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching vehicles:", error);
@@ -173,7 +206,6 @@ export default function ReservationsCreatePage() {
 
     fetchvehicles();
   }, [token]);
-
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -193,34 +225,53 @@ export default function ReservationsCreatePage() {
       .replace("T", " ");
     setFormData((prev) => ({ ...prev, [name]: formattedDate }));
   };
-  const users = [
-    { id: 1, first_name: "User1" },
-    // { "id": 2, "first_name": "User2" },
-    // { "id": 3, "first_name": "User3" },
-    // { "id": 4, "first_name": "User4" },
-    // { "id": 5, "first_name": "User5" },
-    // { "id": 6, "first_name": "User6" },
-    // { "id": 7, "first_name": "User7" },
-    // { "id": 8, "first_name": "User8" },
-    // { "id": 9, "first_name": "User9" },
-    { id: 10, first_name: "User10" },
-    { id: 18, first_name: "User18" },
-    { id: 21, first_name: "User21" },
-    { id: 22, first_name: "User22" },
-  ];
 
-  const handleUserIdChange = (userId: number) => {
-    setFormData((prev) => {
-      const newUserIds = prev.user_id.includes(userId)
-        ? prev.user_id.filter((id) => id !== userId)
-        : [...prev.user_id, userId];
-      return { ...prev, user_id: newUserIds };
-    });
+
+  const handleSelectUser = (userId: number) => {
+    setFormData((prev) => ({ ...prev,user_id:[...prev.user_id,userId]}));
   };
+  // ===========================================================
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]); // Array of User type
+  const [showResults, setShowResults] = useState(true);
+
+  const searchResults = useMemo(() => {
+    return utilisateurs.filter(
+      (user) =>
+        user.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !selectedUsers.some((selectedUser) => selectedUser.id === user.id)
+    );
+  }, [searchQuery, selectedUsers,utilisateurs]);
+
+  const handleSearch = () => {
+    setShowResults(true);
+  };
+
+  const addUser = (user: User) => {
+    // Explicitly typed user
+    setSelectedUsers([...selectedUsers, user]);
+    handleSelectUser(user.id)
+  };
+
+  const removeUser = (userId: number) => {
+    // Parameter userId is a number
+    setSelectedUsers(selectedUsers.filter((user) => user.id !== userId));
+  };
+
+  const clearAllUsers = () => {
+    setSelectedUsers([]);
+  };
+
+  const toggleResults = () => {
+    setShowResults(!showResults);
+  };
+  
+  // ===========================================================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     console.log("formData :", formData);
+      console.log("selectedUsers :", selectedUsers );
 
     try {
       const response = await fetch(
@@ -328,7 +379,7 @@ export default function ReservationsCreatePage() {
                     <SelectValue placeholder="Sélectionnez le type" />
                   </SelectTrigger>
                   <SelectContent>
-                  {reservationsTypes.map((compte, index) => (
+                    {reservationsTypes.map((compte, index) => (
                       <SelectItem key={index} value={compte.id.toString()}>
                         {compte.name}
                       </SelectItem>
@@ -353,7 +404,7 @@ export default function ReservationsCreatePage() {
                     <SelectValue placeholder="Sélectionnez le véhicule" />
                   </SelectTrigger>
                   <SelectContent>
-                  {vehicles.map((compte, index) => (
+                    {vehicles.map((compte, index) => (
                       <SelectItem key={index} value={compte.id.toString()}>
                         {compte.brand} ( {compte.model})
                       </SelectItem>
@@ -363,37 +414,99 @@ export default function ReservationsCreatePage() {
               </div>
             </div>
 
-            {/* Sélection des utilisateurs */}
-            <div className="flex-1 mt-4">
-              <label className="block text-sm font-medium mb-1">
-                Sélectionnez les Utilisateurs
-              </label>
-              <div className="flex flex-wrap gap-5">
-                {users.map((user) => (
-                  <div
-                    key={user.id}
-                    className={`flex items-center p-2 rounded-md ${
-                      formData.user_id.includes(user.id)
-                        ? "border-2 border-sky-600"
-                        : "border-2 border-transparent"
-                    }`}
-                  >
-                    <Checkbox
-                      id={`user-${user.id}`}
-                      checked={formData.user_id.includes(user.id)}
-                      onCheckedChange={() => handleUserIdChange(user.id)}
-                    />
-                    <label
-                      htmlFor={`user-${user.id}`}
-                      className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {user.first_name} (ID: {user.id})
-                    </label>
+            <div className="max-w-full mx-auto p-4 space-y-4">
+              <label
+                  htmlFor="selectionnez"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Sélectionnez les Utilisateurs
+                </label>
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                <Input
+                  type="text"
+                  placeholder="Search for a user"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-grow"
+                  id="selectionnez"
+                />
+                <Button
+                  onClick={handleSearch}
+                  className="bg-black text-white w-full sm:w-auto"
+                >
+                  Search
+                </Button>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                <div className="w-full sm:w-1/2 border rounded-md p-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <h2 className="font-semibold">Search Results:</h2>
+                    <Button variant="ghost" size="sm" onClick={toggleResults}>
+                      {showResults ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      )}
+                      {showResults ? "Hide" : "Show"}
+                    </Button>
                   </div>
-                ))}
+                  {showResults && (
+                    <div className="max-h-60 overflow-y-auto">
+                      <ul className="space-y-1">
+                        {searchResults.map((user) => (
+                          <li
+                            key={user.id}
+                            className="flex justify-between items-center"
+                          >
+                            <span>{user.username}</span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addUser(user)}
+                            >
+                              Add
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                <div className="w-full sm:w-1/2 border rounded-md p-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <h2 className="font-semibold">Selected Users:</h2>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={clearAllUsers}
+                    >
+                      Clear All
+                    </Button>
+                  </div>
+                  <div className="max-h-60 overflow-y-auto">
+                    <ul className="space-y-1">
+                      {selectedUsers.map((user) => (
+                        <li
+                          key={user.id}
+                          className="flex justify-between items-center"
+                        >
+                          <span>{user.username}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeUser(user.id)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-
             {/* Dates sur une ligne */}
             <div className="flex flex-wrap gap-4 mt-4">
               <div className="flex-1">
@@ -469,3 +582,36 @@ export default function ReservationsCreatePage() {
     </div>
   );
 }
+
+
+
+            {/* Sélection des utilisateurs */}
+            {/* <div className="flex-1 mt-4">
+              <label className="block text-sm font-medium mb-1">
+                Sélectionnez les Utilisateurs
+              </label>
+              <div className="flex flex-wrap gap-5">
+                {users.map((user) => (
+                  <div
+                    key={user.id}
+                    className={`flex items-center p-2 rounded-md ${
+                      formData.user_id.includes(user.id)
+                        ? "border-2 border-sky-600"
+                        : "border-2 border-transparent"
+                    }`}
+                  >
+                    <Checkbox
+                      id={`user-${user.id}`}
+                      checked={formData.user_id.includes(user.id)}
+                      onCheckedChange={() => handleUserIdChange(user.id)}
+                    />
+                    <label
+                      htmlFor={`user-${user.id}`}
+                      className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {user.first_name} (ID: {user.id})
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div> */}
