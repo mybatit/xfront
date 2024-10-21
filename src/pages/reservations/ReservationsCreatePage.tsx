@@ -343,7 +343,7 @@ export default function ReservationsCreatePage() {
                   htmlFor="account_id"
                   className="block text-sm font-medium mb-1"
                 >
-                  ID Compte
+                  Compte
                 </label>
                 <Select
                   onValueChange={(value) =>
@@ -368,7 +368,7 @@ export default function ReservationsCreatePage() {
                   htmlFor="reservationstypes_id"
                   className="block text-sm font-medium mb-1"
                 >
-                  ID Type de Réservation
+                  Type de Réservation
                 </label>
                 <Select
                   onValueChange={(value) =>
@@ -393,7 +393,7 @@ export default function ReservationsCreatePage() {
                   htmlFor="vehicle_id"
                   className="block text-sm font-medium mb-1"
                 >
-                  ID Véhicule
+                  Véhicule
                 </label>
                 <Select
                   onValueChange={(value) =>
