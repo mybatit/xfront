@@ -222,8 +222,8 @@ const TypesDesReservationsPage = () => {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.data_items) {
-          setReservationsTypes(data.data_items); // Update state with fetched data
+        if (data.my_items) {
+          setReservationsTypes(data.my_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }

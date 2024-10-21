@@ -134,8 +134,8 @@ const Formalirers = () => {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.data_items) {
-          setFormalirers(data.data_items); // Update state with fetched data
+        if (data.my_items) {
+          setFormalirers(data.my_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }

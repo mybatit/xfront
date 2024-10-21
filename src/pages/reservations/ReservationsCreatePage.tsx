@@ -117,8 +117,8 @@ export default function ReservationsCreatePage() {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.data_items) {
-          setUtilisateurs(data.data_items); // Update state with fetched data
+        if (data.my_items) {
+          setUtilisateurs(data.my_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
@@ -155,8 +155,8 @@ export default function ReservationsCreatePage() {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.data_items) {
-          setReservationsTypes(data.data_items); // Update state with fetched data
+        if (data.my_items) {
+          setReservationsTypes(data.my_items); // Update state with fetched data
           // setError(null);
           // setLoading(false);
         }
@@ -192,8 +192,8 @@ export default function ReservationsCreatePage() {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.data_items) {
-          setVehicles(data.data_items); // Update state with fetched data
+        if (data.my_items) {
+          setVehicles(data.my_items); // Update state with fetched data
           // setError(null);
           // setLoading(false);
         }
@@ -243,9 +243,9 @@ export default function ReservationsCreatePage() {
     );
   }, [searchQuery, selectedUsers,utilisateurs]);
 
-  const handleSearch = () => {
-    setShowResults(true);
-  };
+  // const handleSearch = () => {
+  //   setShowResults(true);
+  // };
 
   const addUser = (user: User) => {
     // Explicitly typed user
@@ -430,12 +430,12 @@ export default function ReservationsCreatePage() {
                   className="flex-grow"
                   id="selectionnez"
                 />
-                <Button
+                {/* <Button
                   onClick={handleSearch}
                   className="bg-black text-white w-full sm:w-auto"
                 >
                   Search
-                </Button>
+                </Button> */}
               </div>
 
               <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">

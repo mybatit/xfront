@@ -223,8 +223,8 @@ const PriviligesPage = () => {
 
         const data = await response.json();
         console.log("data :", data);
-        if (data.data_items) {
-          setPrivileges(data.data_items); // Update state with fetched data
+        if (data.my_items) {
+          setPrivileges(data.my_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
