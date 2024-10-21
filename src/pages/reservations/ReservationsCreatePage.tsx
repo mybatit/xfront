@@ -15,15 +15,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { Account, ReservationsType, User, Vehicules } from "@/types/types";
 // import Link from "next/link"
 import { X, ChevronDown, ChevronUp } from "lucide-react";
+import Loader from "@/components/ui/Elements/Loader";
 interface FormData {
-  description: string;
   account_id: number;
   reservationstypes_id: number;
-  vehicle_id: number;
-  user_id: number[];
-  date_start: string;
-  date_end: string;
+  vehicle_id: number | null;  // Nullable field
+  user_ids: number[] | null;  // Nullable array
+  before_date_start: string;
+  date_start: string | null;  // Nullable field
+  date_end: string | null;    // Nullable field
+  after_date_end: string;
+  description: string;
 }
+
 
 export default function ReservationsCreatePage() {
   const [loading, setLoading] = useState(true);
@@ -34,13 +38,16 @@ export default function ReservationsCreatePage() {
 
   const [formData, setFormData] = useState<FormData>({
     description: "",
-    account_id: 1,
-    reservationstypes_id: 1,
-    vehicle_id: 1,
-    user_id: [],
-    date_start: "",
-    date_end: "",
+    account_id: 0, // Initialize with a number
+    reservationstypes_id: 0, // Initialize with a number
+    vehicle_id: null, // Nullable field
+    user_ids: [],
+    date_start: null, // Nullable field
+    date_end: null, // Nullable field
+    before_date_start: "",
+    after_date_end: ""
   });
+  
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -132,7 +139,9 @@ export default function ReservationsCreatePage() {
     fetchusers();
   }, [token]);
 
-  const [reservationsTypes, setReservationsTypes] = useState<ReservationsType[]>([]);
+  const [reservationsTypes, setReservationsTypes] = useState<
+    ReservationsType[]
+  >([]);
   useEffect(() => {
     setLoading(true);
     // setError(null);
@@ -226,10 +235,13 @@ export default function ReservationsCreatePage() {
     setFormData((prev) => ({ ...prev, [name]: formattedDate }));
   };
 
-
   const handleSelectUser = (userId: number) => {
-    setFormData((prev) => ({ ...prev,user_id:[...prev.user_id,userId]}));
+    setFormData((prev) => ({
+      ...prev,
+      user_ids: prev.user_ids ? [...prev.user_ids, userId] : [userId]
+    }));
   };
+  
   // ===========================================================
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]); // Array of User type
@@ -241,7 +253,7 @@ export default function ReservationsCreatePage() {
         user.username.toLowerCase().includes(searchQuery.toLowerCase()) &&
         !selectedUsers.some((selectedUser) => selectedUser.id === user.id)
     );
-  }, [searchQuery, selectedUsers,utilisateurs]);
+  }, [searchQuery, selectedUsers, utilisateurs]);
 
   // const handleSearch = () => {
   //   setShowResults(true);
@@ -250,7 +262,7 @@ export default function ReservationsCreatePage() {
   const addUser = (user: User) => {
     // Explicitly typed user
     setSelectedUsers([...selectedUsers, user]);
-    handleSelectUser(user.id)
+    handleSelectUser(user.id);
   };
 
   const removeUser = (userId: number) => {
@@ -265,17 +277,17 @@ export default function ReservationsCreatePage() {
   const toggleResults = () => {
     setShowResults(!showResults);
   };
-  
+
   // ===========================================================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     console.log("formData :", formData);
-      console.log("selectedUsers :", selectedUsers );
+    console.log("selectedUsers :", selectedUsers);
 
     try {
       const response = await fetch(
-        "http://xapi.vengoreserve.com/api/create/reservations",
+        "http://xapi.vengoreserve.com/api/create/reservation",
         {
           method: "POST",
           headers: {
@@ -306,7 +318,7 @@ export default function ReservationsCreatePage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader />
       </div>
     );
   }
@@ -416,11 +428,11 @@ export default function ReservationsCreatePage() {
 
             <div className="max-w-full mx-auto p-4 space-y-4">
               <label
-                  htmlFor="selectionnez"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Sélectionnez les Utilisateurs
-                </label>
+                htmlFor="selectionnez"
+                className="block text-sm font-medium mb-1"
+              >
+                Sélectionnez les Utilisateurs
+              </label>
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                 <Input
                   type="text"
@@ -509,6 +521,32 @@ export default function ReservationsCreatePage() {
             </div>
             {/* Dates sur une ligne */}
             <div className="flex flex-wrap gap-4 mt-4">
+              {/* Date avant Début */}
+              <div className="flex-1">
+                <label
+                  htmlFor="before_date_start"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Date avant Début
+                </label>
+                <Input
+                  type="datetime-local"
+                  id="before_date_start"
+                  name="before_date_start"
+                  value={
+                    formData.before_date_start
+                      ? formData.before_date_start
+                          .replace(" ", "T")
+                          .slice(0, 16)
+                      : "2052-01-01T10:00"
+                  }
+                  onChange={(e) =>
+                    handleDateChange("before_date_start", e.target.value)
+                  }
+                />
+              </div>
+
+              {/* Date de Début */}
               <div className="flex-1">
                 <label
                   htmlFor="date_start"
@@ -520,13 +558,18 @@ export default function ReservationsCreatePage() {
                   type="datetime-local"
                   id="date_start"
                   name="date_start"
-                  value={formData.date_start.replace(" ", "T").slice(0, 16)}
+                  value={
+                    formData.date_start
+                      ? formData.date_start.replace(" ", "T").slice(0, 16)
+                      : "2052-01-02T10:00"
+                  }
                   onChange={(e) =>
                     handleDateChange("date_start", e.target.value)
                   }
                 />
               </div>
 
+              {/* Date de Fin */}
               <div className="flex-1">
                 <label
                   htmlFor="date_end"
@@ -538,8 +581,35 @@ export default function ReservationsCreatePage() {
                   type="datetime-local"
                   id="date_end"
                   name="date_end"
-                  value={formData.date_end.replace(" ", "T").slice(0, 16)}
+                  value={
+                    formData.date_end
+                      ? formData.date_end.replace(" ", "T").slice(0, 16)
+                      : "2052-01-03T18:00"
+                  }
                   onChange={(e) => handleDateChange("date_end", e.target.value)}
+                />
+              </div>
+
+              {/* Date après Fin */}
+              <div className="flex-1">
+                <label
+                  htmlFor="after_date_end"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Date après Fin
+                </label>
+                <Input
+                  type="datetime-local"
+                  id="after_date_end"
+                  name="after_date_end"
+                  value={
+                    formData.after_date_end
+                      ? formData.after_date_end.replace(" ", "T").slice(0, 16)
+                      : "2052-01-04T18:00"
+                  }
+                  onChange={(e) =>
+                    handleDateChange("after_date_end", e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -583,10 +653,11 @@ export default function ReservationsCreatePage() {
   );
 }
 
-
-
-            {/* Sélection des utilisateurs */}
-            {/* <div className="flex-1 mt-4">
+{
+  /* Sélection des utilisateurs */
+}
+{
+  /* <div className="flex-1 mt-4">
               <label className="block text-sm font-medium mb-1">
                 Sélectionnez les Utilisateurs
               </label>
@@ -595,14 +666,14 @@ export default function ReservationsCreatePage() {
                   <div
                     key={user.id}
                     className={`flex items-center p-2 rounded-md ${
-                      formData.user_id.includes(user.id)
+                      formData.user_ids.includes(user.id)
                         ? "border-2 border-sky-600"
                         : "border-2 border-transparent"
                     }`}
                   >
                     <Checkbox
                       id={`user-${user.id}`}
-                      checked={formData.user_id.includes(user.id)}
+                      checked={formData.user_ids.includes(user.id)}
                       onCheckedChange={() => handleUserIdChange(user.id)}
                     />
                     <label
@@ -614,4 +685,5 @@ export default function ReservationsCreatePage() {
                   </div>
                 ))}
               </div>
-            </div> */}
+            </div> */
+}
