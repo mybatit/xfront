@@ -327,7 +327,7 @@ export default function ReservationsCreatePage() {
     <div className="flex flex-col max-h-screen ">
       <div className="flex flex-1 flex-col lg:flex-row ">
         <aside className="w-full lg:w-64 bg-gray-100 p-4">
-          <h3 className="font-bold mb-2">Recherche Réservation</h3>
+          <h3 className="font-bold mb-2">List des Réservation</h3>
           <Link to="/reservations">
             <Button className="w-full mb-4" variant="outline">
               Réservations
@@ -538,7 +538,7 @@ export default function ReservationsCreatePage() {
                       ? formData.before_date_start
                           .replace(" ", "T")
                           .slice(0, 16)
-                      : "2052-01-01T10:00"
+                      : ""
                   }
                   onChange={(e) =>
                     handleDateChange("before_date_start", e.target.value)
@@ -561,7 +561,7 @@ export default function ReservationsCreatePage() {
                   value={
                     formData.date_start
                       ? formData.date_start.replace(" ", "T").slice(0, 16)
-                      : "2052-01-02T10:00"
+                      : ""
                   }
                   onChange={(e) =>
                     handleDateChange("date_start", e.target.value)
@@ -584,7 +584,7 @@ export default function ReservationsCreatePage() {
                   value={
                     formData.date_end
                       ? formData.date_end.replace(" ", "T").slice(0, 16)
-                      : "2052-01-03T18:00"
+                      : ""
                   }
                   onChange={(e) => handleDateChange("date_end", e.target.value)}
                 />
@@ -605,7 +605,7 @@ export default function ReservationsCreatePage() {
                   value={
                     formData.after_date_end
                       ? formData.after_date_end.replace(" ", "T").slice(0, 16)
-                      : "2052-01-04T18:00"
+                      : ""
                   }
                   onChange={(e) =>
                     handleDateChange("after_date_end", e.target.value)
@@ -651,39 +651,4 @@ export default function ReservationsCreatePage() {
       </div>
     </div>
   );
-}
-
-{
-  /* Sélection des utilisateurs */
-}
-{
-  /* <div className="flex-1 mt-4">
-              <label className="block text-sm font-medium mb-1">
-                Sélectionnez les Utilisateurs
-              </label>
-              <div className="flex flex-wrap gap-5">
-                {users.map((user) => (
-                  <div
-                    key={user.id}
-                    className={`flex items-center p-2 rounded-md ${
-                      formData.user_ids.includes(user.id)
-                        ? "border-2 border-sky-600"
-                        : "border-2 border-transparent"
-                    }`}
-                  >
-                    <Checkbox
-                      id={`user-${user.id}`}
-                      checked={formData.user_ids.includes(user.id)}
-                      onCheckedChange={() => handleUserIdChange(user.id)}
-                    />
-                    <label
-                      htmlFor={`user-${user.id}`}
-                      className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {user.first_name} (ID: {user.id})
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div> */
 }

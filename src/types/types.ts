@@ -90,7 +90,23 @@ export interface Reservations {
     profile_photo_url: string;
   }
   
-
+  export interface EtatsDesReservations {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    name: string;
+    description: string | null;
+    account_id: number;
+    created_by: number;
+    code_objects_id: number;
+    code_synchronisations_id: number;
+    deleted_at: string | null;
+    deleted: boolean | number;
+    deleted_by: number | null;
+    restored_at: string | null;
+    restored: boolean | number;
+    restored_by: number | null;
+  }
   export interface Vehicules {
     id: number;
     brand: string;

@@ -37,7 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Loader from "@/components/ui/Elements/Loader";
-import { PaginationState } from "@/types/types";
+import { EtatsDesReservations, PaginationState } from "@/types/types";
 
 // Utiliser un identifiant unique pour chaque table
 const tableId = "etatsDesReservations";
@@ -56,23 +56,7 @@ function convertDateFormat(dateString: string): string {
   // Retourner le format souhaité
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
-interface EtatsDesReservations {
-  id: number;
-  created_at: string;
-  updated_at: string;
-  name: string;
-  description: string | null;
-  account_id: number;
-  created_by: number;
-  code_objects_id: number;
-  code_synchronisations_id: number;
-  deleted_at: string | null;
-  deleted: boolean | number;
-  deleted_by: number | null;
-  restored_at: string | null;
-  restored: boolean | number;
-  restored_by: number | null;
-}
+
 
 const columns: ColumnDef<EtatsDesReservations>[] = [
   {
@@ -185,9 +169,7 @@ const columns: ColumnDef<EtatsDesReservations>[] = [
 ];
 
 const EtatsDesReservationsPage = () => {
-  const [etatsDesReservations, setEtatsDesReservations] = useState<
-    EtatsDesReservations[]
-  >([]);
+  const [etatsDesReservations, setEtatsDesReservations] = useState<EtatsDesReservations[]>([]);
   // // const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
