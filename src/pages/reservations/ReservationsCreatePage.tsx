@@ -18,6 +18,10 @@ import { X, ChevronDown, ChevronUp } from "lucide-react";
 import Loader from "@/components/ui/Elements/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyErreur } from "@/lib/methods";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+
+
 interface FormData {
   account_id: number;
   reservationstypes_id: number;
@@ -49,8 +53,16 @@ export default function ReservationsCreatePage() {
     before_date_start: "",
     after_date_end: ""
   });
+  const { toast } = useToast();
   
-
+  function showToast(msg: string) {
+    toast({
+      variant: "destructive",
+      title: "Login error",
+      description: msg,
+      action: <ToastAction altText="Retry">Retry</ToastAction>,
+    });
+  }
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -285,6 +297,7 @@ export default function ReservationsCreatePage() {
     e.preventDefault();
     if (!formData.account_id) {
       notifyErreur("Veuillez sélectionner un compte.");
+      showToast("Veuillez sélectionner un compte.");
       return false;
     }
     

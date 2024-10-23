@@ -12,6 +12,8 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import { Account } from "@/types/types";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 // Définir une interface pour les données du formulaire
 interface FormData {
@@ -33,7 +35,16 @@ export default function CreateUtilisateursPage() {
 
   const [decodedToken, setDecodedToken] = useState(null);
   const [token, settoken] = useState(""); // Add loading state
-
+  const { toast } = useToast();
+  
+  function showToast(msg: string) {
+    toast({
+      variant: "destructive",
+      title: "Ajout d'une erreur utilisateur",
+      description: msg,
+      action: <ToastAction altText="Retry">Retry</ToastAction>,
+    });
+  }
   useEffect(() => {
     // Check for token in local storage
     const token = localStorage.getItem("token");
@@ -105,7 +116,18 @@ export default function CreateUtilisateursPage() {
       password_confirmation: passwordConfirmation,
       account_id: parseInt(accountId, 10),
     };
-
+    if (!formData?.email) {
+      showToast("Veuillez entrer un E-mail.");
+      return false;
+    }
+    if (!formData?.password) {
+      showToast("Veuillez entrer un Mot de passe.");
+      return false;
+    }
+    if (!formData?.password_confirmation) {
+      showToast("Veuillez entrer Confirmation du mot de passe.");
+      return false;
+    }
     try {
       console.log("Form submitted", formData);
       console.log("token", token);
@@ -167,13 +189,13 @@ export default function CreateUtilisateursPage() {
                   htmlFor="email"
                   className="w-1/3 text-right mr-4 text-blue-500"
                 >
-                  * Email
+                  * E-mail
                 </Label>
 
                 <Input
                   id="email"
                   type="email"
-                  required
+                  
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-2/3"
@@ -186,12 +208,12 @@ export default function CreateUtilisateursPage() {
                   htmlFor="password"
                   className="w-1/3 text-right mr-4 text-blue-500"
                 >
-                  * Password
+                  * Mot de passe
                 </Label>
                 <Input
                   id="password"
                   type="password"
-                  required
+                  
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-2/3"
@@ -204,12 +226,12 @@ export default function CreateUtilisateursPage() {
                   htmlFor="password-confirmation"
                   className="w-1/3 text-right mr-4 text-blue-500"
                 >
-                  * Confirmation du mot de passe
+                  Confirmation du mot de passe
                 </Label>
                 <Input
                   id="password-confirmation"
                   type="password"
-                  required
+                  
                   value={passwordConfirmation}
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                   className="w-2/3"
