@@ -60,7 +60,7 @@ export default function ReservationsCreatePage() {
       variant: "destructive",
       title: "Login error",
       description: msg,
-      action: <ToastAction altText="Retry">Retry</ToastAction>,
+      action: <ToastAction altText="Réessayer">Réessayer</ToastAction>,
     });
   }
   useEffect(() => {

@@ -18,6 +18,8 @@ import { ToastAction } from "@/components/ui/toast";
 // Définir une interface pour les données du formulaire
 interface FormData {
   email: string;
+  first_name: string;
+  last_name: string;
   password: string;
   password_confirmation: string;
   account_id: number;
@@ -26,6 +28,8 @@ interface FormData {
 export default function CreateUtilisateursPage() {
   // Utiliser l'interface FormData pour les types des états
   const [email, setEmail] = useState<string>("");
+  const [first_name, setFirstName] = useState<string>("");
+  const [last_name, setLast_name] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
   const [accountId, setAccountId] = useState<string>("");
@@ -36,13 +40,23 @@ export default function CreateUtilisateursPage() {
   const [decodedToken, setDecodedToken] = useState(null);
   const [token, settoken] = useState(""); // Add loading state
   const { toast } = useToast();
-  
-  function showToast(msg: string) {
+
+  function showToast(msg: string, type: string) {
+    const variant =
+      type === "success"
+        ? "success"
+        : type === "warning"
+        ? "warning"
+        : type === "error"
+        ? "destructive"
+        : "default"; // default if no matching type
+
     toast({
-      variant: "destructive",
-      title: "Ajout d'une erreur utilisateur",
+      variant: variant, // dynamically set variant based on type
+      title:
+        type === "error" ? "Ajout d'une erreur utilisateur" : "Notification",
       description: msg,
-      action: <ToastAction altText="Retry">Retry</ToastAction>,
+      action: <ToastAction altText="Réessayer">Réessayer</ToastAction>,
     });
   }
   useEffect(() => {
@@ -88,7 +102,6 @@ export default function CreateUtilisateursPage() {
           throw new Error("Failed to fetch comptes");
         }
 
-        
         const data = await response.json();
         console.log("data: ", data);
         console.log("data.myaccounts: ", data.myaccounts);
@@ -113,19 +126,31 @@ export default function CreateUtilisateursPage() {
     const formData: FormData = {
       email,
       password,
+      last_name,
+      first_name,
       password_confirmation: passwordConfirmation,
       account_id: parseInt(accountId, 10),
     };
+    console.log("Form submitted", formData);
+
     if (!formData?.email) {
-      showToast("Veuillez entrer un E-mail.");
+      showToast("Veuillez entrer un E-mail.", "error");
+      return false;
+    }
+    if (!formData?.first_name) {
+      showToast("Veuillez entrer le nom.", "error");
+      return false;
+    }
+    if (!formData?.last_name) {
+      showToast("Veuillez entrer le prenom.", "error");
       return false;
     }
     if (!formData?.password) {
-      showToast("Veuillez entrer un Mot de passe.");
+      showToast("Veuillez entrer un Mot de passe.", "error");
       return false;
     }
     if (!formData?.password_confirmation) {
-      showToast("Veuillez entrer Confirmation du mot de passe.");
+      showToast("Veuillez entrer Confirmation du mot de passe.", "error");
       return false;
     }
     try {
@@ -145,12 +170,16 @@ export default function CreateUtilisateursPage() {
       console.log("response :", response);
 
       if (!response.ok) {
+        // showToast("Erreur lors de la soumission du formulaire", "warning");
         throw new Error("Erreur lors de la soumission du formulaire");
       }
 
       const data = await response.json();
-      console.log("Réponse de l'API:", data);
-      navigate("/utilisateurs");
+      if (data) {
+        showToast("L'utilisateur a été ajouté avec succès", "success");
+        console.log("Réponse de l'API:", data);
+        navigate("/utilisateurs");
+      }
 
       // Vous pouvez ajouter un message de succès ou rediriger l'utilisateur après la soumission réussie.
     } catch (error) {
@@ -195,13 +224,45 @@ export default function CreateUtilisateursPage() {
                 <Input
                   id="email"
                   type="email"
-                  
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-2/3"
                 />
               </div>
+              {/* Champ last_name */}
+              <div className="flex items-center">
+                <Label
+                  htmlFor="last_name"
+                  className="w-1/3 text-right mr-4 text-blue-500"
+                >
+                  * Nom
+                </Label>
 
+                <Input
+                  id="last_name"
+                  type="text"
+                  value={last_name}
+                  onChange={(e) => setLast_name(e.target.value)}
+                  className="w-2/3"
+                />
+              </div>
+              {/* Champ Email */}
+              <div className="flex items-center">
+                <Label
+                  htmlFor="first_name"
+                  className="w-1/3 text-right mr-4 text-blue-500"
+                >
+                  * Prénom
+                </Label>
+
+                <Input
+                  id="first_name"
+                  type="text"
+                  value={first_name}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-2/3"
+                />
+              </div>
               {/* Champ Password */}
               <div className="flex items-center">
                 <Label
@@ -213,7 +274,6 @@ export default function CreateUtilisateursPage() {
                 <Input
                   id="password"
                   type="password"
-                  
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-2/3"
@@ -231,7 +291,6 @@ export default function CreateUtilisateursPage() {
                 <Input
                   id="password-confirmation"
                   type="password"
-                  
                   value={passwordConfirmation}
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                   className="w-2/3"
@@ -251,8 +310,10 @@ export default function CreateUtilisateursPage() {
                     <SelectValue placeholder="Sélectionnez le compte" />
                   </SelectTrigger>
                   <SelectContent>
-                    {comptes.map((compte,index)=>(
-                      <SelectItem key={index} value={compte.id.toString()}>{compte.name}</SelectItem>
+                    {comptes.map((compte, index) => (
+                      <SelectItem key={index} value={compte.id.toString()}>
+                        {compte.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
