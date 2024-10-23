@@ -222,7 +222,7 @@ export default function CreateUtilisateursPage() {
                   htmlFor="account-id"
                   className="w-1/3 text-right mr-4 text-blue-500"
                 >
-                  * ID du Compte
+                  * Compte
                 </Label>
                 <Select value={accountId} onValueChange={setAccountId}>
                   <SelectTrigger id="account-id" className="w-2/3">

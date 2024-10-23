@@ -6,6 +6,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import TypesDesReservationsCreatePage from "./pages/types des reservations/TypesDesReservationsCreatePage";
+import DetailsReservationPage from "./pages/reservations/DetailsReservationPage";
 
 // Utilisation de React.lazy pour charger les composants dynamiquement
 const Login = lazy(() => import("./pages/Authentication/Login"));
@@ -156,6 +157,14 @@ const App = () => {
             element={
               <Suspense fallback={<div>Chargement...</div>}>
                 <ReservationsCreatePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/reservations/details/:reservation_id"
+            element={
+              <Suspense fallback={<div>Chargement...</div>}>
+                <DetailsReservationPage />
               </Suspense>
             }
           />

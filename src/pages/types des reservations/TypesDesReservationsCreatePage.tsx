@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Account, EtatsDesReservations, User } from "@/types/types";
 import Loader from "@/components/ui/Elements/Loader";
 
+import "react-toastify/dist/ReactToastify.css";
+import { notifyErreur } from "@/lib/methods";
 // Types
 interface FormData {
   account_id: string;
@@ -29,28 +30,29 @@ interface ReservationStatus {
   user_ids: number[];
 }
 interface Form {
-    id: number;
-    created_at: string; // ou Date, selon tes besoins
-    updated_at: string; // ou Date, selon tes besoins
-    name: string;
-    description: string | null;
-    created_by: number;
-    account_id: number;
-    deleted_at: string | null; // ou Date, selon tes besoins
-    deleted: number;
-    deleted_by: number | null;
-    restored_at: string | null; // ou Date, selon tes besoins
-    restored: number;
-    restored_by: number | null;
-    code_objects: string;
-    code_synchronisations: string;
-    code_unique_id: number;
+  id: number;
+  created_at: string; // ou Date, selon tes besoins
+  updated_at: string; // ou Date, selon tes besoins
+  name: string;
+  description: string | null;
+  created_by: number;
+  account_id: number;
+  deleted_at: string | null; // ou Date, selon tes besoins
+  deleted: number;
+  deleted_by: number | null;
+  restored_at: string | null; // ou Date, selon tes besoins
+  restored: number;
+  restored_by: number | null;
+  code_objects: string;
+  code_synchronisations: string;
+  code_unique_id: number;
 }
 export default function TypesDesReservationsCreatePage() {
   const [submitting, setSubmitting] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+
 
   const [formData, setFormData] = useState<FormData>({
     account_id: "",
@@ -101,7 +103,7 @@ export default function TypesDesReservationsCreatePage() {
 
         if (data.myaccounts) {
           setComptes(data.myaccounts); // Update state with fetched data
-        //   setLoading(false);
+          //   setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching comptes:", error);
@@ -137,8 +139,8 @@ export default function TypesDesReservationsCreatePage() {
         // console.log("data.$my_items: ", data.$my_items);
 
         if (data.my_items) {
-            setForms(data.my_items); // Update state with fetched data
-        //   setLoading(false);
+          setForms(data.my_items); // Update state with fetched data
+          //   setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching forms:", error);
@@ -148,7 +150,9 @@ export default function TypesDesReservationsCreatePage() {
     fetchaccounts();
   }, [token]);
 
-  const [statusDesReservations, setStatusDesReservations] = useState<EtatsDesReservations[]>([]);
+  const [statusDesReservations, setStatusDesReservations] = useState<
+    EtatsDesReservations[]
+  >([]);
 
   useEffect(() => {
     setLoading(true);
@@ -173,7 +177,7 @@ export default function TypesDesReservationsCreatePage() {
         const data = await response.json();
         console.log("data :", data);
         if (data.my_items) {
-            setStatusDesReservations(data.my_items); // Update state with fetched data
+          setStatusDesReservations(data.my_items); // Update state with fetched data
           // setError(null);
           setLoading(false);
         }
@@ -276,40 +280,68 @@ export default function TypesDesReservationsCreatePage() {
       ),
     }));
   };
+  const validateForm = () => {
+    // Validation des champs
+    if (!formData.account_id) {
+      notifyErreur("Veuillez sélectionner un compte.");
+      setSubmitting(false);
+      return;
+    }
 
-  const handleSubmit = async(e: React.FormEvent) => {
+    if (!formData.name.trim()) {
+      notifyErreur("Veuillez entrer un nom.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (!formData.form_id) {
+      notifyErreur("Veuillez sélectionner un form.");
+      setSubmitting(false);
+      return;
+    }
+    if (!formData.reservationsstatuses_ids) {
+        notifyErreur("Veuillez sélectionner les statuts des réservations.");
+        setSubmitting(false);
+        return;
+      }
+    return true;
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-
+    if (!validateForm()) {
+      return;
+    }
     console.log(JSON.stringify(formData, null, 2));
+
     try {
-        const response = await fetch(
-          "http://xapi.vengoreserve.com/api/create/reservation-type",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(formData),
-          }
-        );
-  
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Type de Réservation créée avec succès :", data);
-          navigate("/types-des-reservations");
-        } else {
-          console.error(
-            "Erreur lors de la création de la type de réservation :",
-            response.status
-          );
+      const response = await fetch(
+        "http://xapi.vengoreserve.com/api/create/reservation-type",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
         }
-      } catch (error) {
-        console.error("Erreur de connexion :", error);
-      } finally {
-        setSubmitting(false);
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Type de Réservation créée avec succès :", data);
+        navigate("/types-des-reservations");
+      } else {
+        console.error(
+          "Erreur lors de la création de la type de réservation :",
+          response.status
+        );
       }
+    } catch (error) {
+      console.error("Erreur de connexion :", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
   if (loading) {
     return (
@@ -465,7 +497,7 @@ export default function TypesDesReservationsCreatePage() {
                       </Card>
                     ))}
                     <Button
-                    variant="outline"
+                      variant="outline"
                       type="button"
                       onClick={addReservationStatus}
                       className="w-full bord border-2 border-sky-500"
@@ -479,19 +511,19 @@ export default function TypesDesReservationsCreatePage() {
                 Submit
               </Button> */}
               <Button
-              type="submit"
-              className="w-full mt-4 text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-50"
-              disabled={submitting}
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Création en cours...
-                </>
-              ) : (
-                "Créer d'un Type de reservatio Réservation"
-              )}
-            </Button>
+                type="submit"
+                className="w-full mt-4 text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-50"
+                disabled={submitting}
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Création en cours...
+                  </>
+                ) : (
+                  "Créer d'un Type de reservatio Réservation"
+                )}
+              </Button>
             </form>
           </div>
         </main>

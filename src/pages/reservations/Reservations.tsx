@@ -54,31 +54,31 @@ const convertDateFormat = (dateStr: string) => {
 interface Reservations {
   id: number;
   matricule: string;
-  description: string | null;
+  description: string;
   reservationsstatuses_id: number;
   reservationstypes_id: number;
   account_id: number;
-  date_creation: string;
-  date_submit: string | null;
+  date_creation: string; // ISO date string
+  date_submit: string | null; 
   date_validation: string | null;
   date_solde: string | null;
   created_by: number;
-  code_objects_id: number;
-  code_synchronisations_id: number;
+  code_objects_id: number | null;
+  code_synchronisations_id: number | null;
   deleted_at: string | null;
   deleted: number;
   deleted_by: number | null;
   restored_at: string | null;
   restored: number;
   restored_by: number | null;
-  created_at: string;
-  updated_at: string;
+  created_at: string; // ISO date string
+  updated_at: string; // ISO date string
   vehicle_id: number;
-  date_start: string;
-  date_end: string;
+  date_start: string; // ISO date string
+  date_end: string; // ISO date string
   code_objects: string;
   code_synchronisations: string;
-  name: string;
+  name: string | null;
   status: string;
   code_unique_id: number;
   account_name: string;
@@ -86,7 +86,10 @@ interface Reservations {
   after_date_end: string | null;
   vehiclesdisponibilities_id: number | null;
   usersdisponibilities_id: number | null;
+  pickup: string | null;
+  dropoff: string | null;
 }
+
 
 const columns: ColumnDef<Reservations>[] = [
   {

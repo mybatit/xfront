@@ -9,13 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Trash } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { Account, ReservationsType, User, Vehicules } from "@/types/types";
 // import Link from "next/link"
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 import Loader from "@/components/ui/Elements/Loader";
+import "react-toastify/dist/ReactToastify.css";
+import { notifyErreur } from "@/lib/methods";
 interface FormData {
   account_id: number;
   reservationstypes_id: number;
@@ -281,6 +283,35 @@ export default function ReservationsCreatePage() {
   // ===========================================================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.account_id) {
+      notifyErreur("Veuillez sélectionner un compte.");
+      return false;
+    }
+    
+    if (!formData.reservationstypes_id) {
+      notifyErreur("Veuillez sélectionner un type de réservation.");
+      return false;
+    }
+  
+    // if (!formData.vehicle_id) {
+    //   notifyErreur("Veuillez sélectionner un véhicule.");
+    //   return false;
+    // }
+  
+    // if (!formData.date_start) {
+    //   notifyErreur("Veuillez sélectionner une date de début.");
+    //   return false;
+    // }
+  
+    // if (!formData.date_end) {
+    //   notifyErreur("Veuillez sélectionner une date de fin.");
+    //   return false;
+    // }
+  
+    // if (!formData.description.trim()) {
+    //   notifyErreur("Veuillez entrer une description.");
+    //   return false;
+    // }
     setSubmitting(true);
     console.log("formData :", formData);
     console.log("selectedUsers :", selectedUsers);
@@ -301,7 +332,7 @@ export default function ReservationsCreatePage() {
       if (response.ok) {
         const data = await response.json();
         console.log("Réservation créée avec succès :", data);
-        navigate("/reservations");
+        navigate(`/reservations/details/${data.myreservation.id}`);
       } else {
         console.error(
           "Erreur lors de la création de la réservation :",
@@ -453,7 +484,7 @@ export default function ReservationsCreatePage() {
               <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
                 <div className="w-full sm:w-1/2 border rounded-md p-2">
                   <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-semibold">Search Results:</h2>
+                    <h2 className="font-semibold">Résultats de la recherche :</h2>
                     <Button variant="ghost" size="sm" onClick={toggleResults}>
                       {showResults ? (
                         <ChevronUp className="h-4 w-4" />
@@ -477,7 +508,7 @@ export default function ReservationsCreatePage() {
                               size="sm"
                               onClick={() => addUser(user)}
                             >
-                              Add
+                              <Plus size={12}/>
                             </Button>
                           </li>
                         ))}
@@ -488,13 +519,13 @@ export default function ReservationsCreatePage() {
 
                 <div className="w-full sm:w-1/2 border rounded-md p-2">
                   <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-semibold">Selected Users:</h2>
+                    <h2 className="font-semibold">Utilisateurs sélectionnés :</h2>
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={clearAllUsers}
                     >
-                      Clear All
+                      <Trash size={16}/>
                     </Button>
                   </div>
                   <div className="max-h-60 overflow-y-auto">
