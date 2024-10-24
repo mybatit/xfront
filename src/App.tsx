@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import TypesDesReservationsCreatePage from "./pages/types des reservations/TypesDesReservationsCreatePage";
 import DetailsReservationPage from "./pages/reservations/DetailsReservationPage";
+import Loader from "./components/ui/Elements/Loader";
 
 // Utilisation de React.lazy pour charger les composants dynamiquement
 const Login = lazy(() => import("./pages/Authentication/Login"));
@@ -51,7 +52,11 @@ const App = () => {
         <Route
           path="/login"
           element={
-            <Suspense fallback={<div>Chargement...</div>}>
+            <Suspense fallback={
+                  <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+            }>
               <Login />
             </Suspense>
           }
@@ -59,7 +64,11 @@ const App = () => {
         <Route
           path="/"
           element={
-            <Suspense fallback={<div>Chargement...</div>}>
+            <Suspense fallback={
+                  <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+            }>
               <RootLayout />
             </Suspense>
           }
@@ -67,7 +76,11 @@ const App = () => {
           <Route
             index
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <SynthesePage />
               </Suspense>
             }
@@ -76,7 +89,11 @@ const App = () => {
           <Route
             path="/utilisateurs"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <UtilisateursPage />
               </Suspense>
             }
@@ -84,7 +101,11 @@ const App = () => {
           <Route
             path="/utilisateurs/create"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <CreateUtilisateursPage />
               </Suspense>
             }
@@ -92,7 +113,11 @@ const App = () => {
           <Route
             path="/comptes"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <ComptesPage />
               </Suspense>
             }
@@ -100,7 +125,11 @@ const App = () => {
           <Route
             path="/roles"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <RolesPage />
               </Suspense>
             }
@@ -108,7 +137,11 @@ const App = () => {
           <Route
             path="/priviliges"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <PriviligesPage />
               </Suspense>
             }
@@ -117,7 +150,11 @@ const App = () => {
           <Route
             path="/formalirers"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <Formalirers />
               </Suspense>
             }
@@ -125,7 +162,11 @@ const App = () => {
           <Route
             path="/types-des-reservations"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <TypesDesReservationsPage />
               </Suspense>
             }
@@ -133,7 +174,11 @@ const App = () => {
           <Route
             path="/types-des-reservations/create"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <TypesDesReservationsCreatePage />
               </Suspense>
             }
@@ -141,7 +186,11 @@ const App = () => {
           <Route
             path="/etats-des-reservations"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <EtatsDesReservationsPage />
               </Suspense>
             }
@@ -150,7 +199,11 @@ const App = () => {
           <Route
             path="/reservations"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <ReservationsPage />
               </Suspense>
             }
@@ -158,7 +211,11 @@ const App = () => {
           <Route
             path="/reservations/create"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <ReservationsCreatePage />
               </Suspense>
             }
@@ -166,7 +223,11 @@ const App = () => {
           <Route
             path="/reservations/planifier"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <ReservationsPlanifierPage />
               </Suspense>
             }
@@ -174,7 +235,11 @@ const App = () => {
           <Route
             path="/reservations/details/:reservation_id"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <DetailsReservationPage />
               </Suspense>
             }
@@ -183,7 +248,11 @@ const App = () => {
           <Route
             path="/vehicules"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <VehiculesPage />
               </Suspense>
             }
@@ -191,7 +260,11 @@ const App = () => {
           <Route
             path="/vehicules-avec-reservations"
             element={
-              <Suspense fallback={<div>Chargement...</div>}>
+              <Suspense fallback={
+                    <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+              }>
                 <VehiculesAvecReservations />
               </Suspense>
             }
@@ -200,7 +273,11 @@ const App = () => {
         <Route
           path="/*"
           element={
-            <Suspense fallback={<div>Chargement...</div>}>
+            <Suspense fallback={
+                  <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+            }>
               <Error404 />
             </Suspense>
           }
