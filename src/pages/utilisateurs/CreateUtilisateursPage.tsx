@@ -20,6 +20,7 @@ interface FormData {
   email: string;
   first_name: string;
   last_name: string;
+  tel: string;
   password: string;
   password_confirmation: string;
   account_id: number;
@@ -30,6 +31,7 @@ export default function CreateUtilisateursPage() {
   const [email, setEmail] = useState<string>("");
   const [first_name, setFirstName] = useState<string>("");
   const [last_name, setLast_name] = useState<string>("");
+  const [tel, setTel] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
   const [accountId, setAccountId] = useState<string>("");
@@ -128,6 +130,7 @@ export default function CreateUtilisateursPage() {
       password,
       last_name,
       first_name,
+      tel,
       password_confirmation: passwordConfirmation,
       account_id: parseInt(accountId, 10),
     };
@@ -143,6 +146,10 @@ export default function CreateUtilisateursPage() {
     }
     if (!formData?.last_name) {
       showToast("Veuillez entrer le prenom.", "error");
+      return false;
+    }
+    if (!formData?.tel) {
+      showToast("Veuillez entrer le numéro de téléphone.", "error");
       return false;
     }
     if (!formData?.password) {
@@ -216,7 +223,7 @@ export default function CreateUtilisateursPage() {
               <div className="flex items-center">
                 <Label
                   htmlFor="email"
-                  className="w-1/3 text-right mr-4 text-blue-500"
+                  className="w-1/3  mr-4 text-blue-500"
                 >
                   * E-mail
                 </Label>
@@ -233,7 +240,7 @@ export default function CreateUtilisateursPage() {
               <div className="flex items-center">
                 <Label
                   htmlFor="last_name"
-                  className="w-1/3 text-right mr-4 text-blue-500"
+                  className="w-1/3  mr-4 text-blue-500"
                 >
                   * Nom
                 </Label>
@@ -246,11 +253,11 @@ export default function CreateUtilisateursPage() {
                   className="w-2/3"
                 />
               </div>
-              {/* Champ Email */}
+              {/* Champ prenom */}
               <div className="flex items-center">
                 <Label
                   htmlFor="first_name"
-                  className="w-1/3 text-right mr-4 text-blue-500"
+                  className="w-1/3  mr-4 text-blue-500"
                 >
                   * Prénom
                 </Label>
@@ -263,11 +270,28 @@ export default function CreateUtilisateursPage() {
                   className="w-2/3"
                 />
               </div>
+              {/* Champ tel */}
+              <div className="flex items-center">
+                <Label
+                  htmlFor="tel"
+                  className="w-1/3  mr-4 text-blue-500"
+                >
+                  * Téléphone
+                </Label>
+
+                <Input
+                  id="tel"
+                  type="text"
+                  value={tel}
+                  onChange={(e) => setTel(e.target.value)}
+                  className="w-2/3"
+                />
+              </div>
               {/* Champ Password */}
               <div className="flex items-center">
                 <Label
                   htmlFor="password"
-                  className="w-1/3 text-right mr-4 text-blue-500"
+                  className="w-1/3  mr-4 text-blue-500"
                 >
                   * Mot de passe
                 </Label>
@@ -284,7 +308,7 @@ export default function CreateUtilisateursPage() {
               <div className="flex items-center">
                 <Label
                   htmlFor="password-confirmation"
-                  className="w-1/3 text-right mr-4 text-blue-500"
+                  className="w-1/3  mr-4 text-blue-500"
                 >
                   Confirmation du mot de passe
                 </Label>
@@ -301,7 +325,7 @@ export default function CreateUtilisateursPage() {
               <div className="flex items-center">
                 <Label
                   htmlFor="account-id"
-                  className="w-1/3 text-right mr-4 text-blue-500"
+                  className="w-1/3  mr-4 text-blue-500"
                 >
                   * Compte
                 </Label>

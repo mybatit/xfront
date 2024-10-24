@@ -17,30 +17,30 @@ import { Account, ReservationsType, User, Vehicules } from "@/types/types";
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 import Loader from "@/components/ui/Elements/Loader";
 import "react-toastify/dist/ReactToastify.css";
-import { notifyErreur } from "@/lib/methods";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-
 
 interface FormData {
   account_id: number;
   reservationstypes_id: number;
-  vehicle_id: number | null;  // Nullable field
-  user_ids: number[] | null;  // Nullable array
+  vehicle_id: number | null; // Nullable field
+  user_ids: number[] | null; // Nullable array
   before_date_start: string;
-  date_start: string | null;  // Nullable field
-  date_end: string | null;    // Nullable field
+  date_start: string | null; // Nullable field
+  date_end: string | null; // Nullable field
   after_date_end: string;
   description: string;
 }
 
-
 export default function ReservationsCreatePage() {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  // const [loadingComptes, setLoadingComptes] = useState(true);
+  const [loadingUtilisateurs, setLoadingUtilisateurs] = useState(true);
+  // const [loadingReservationsTypes, setLoadingReservationsTypes] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const navigate = useNavigate();
-
   const [token, setToken] = useState<string | null>(null);
+  const [accountId, setAccountId] = useState("");
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
     description: "",
@@ -51,18 +51,19 @@ export default function ReservationsCreatePage() {
     date_start: null, // Nullable field
     date_end: null, // Nullable field
     before_date_start: "",
-    after_date_end: ""
+    after_date_end: "",
   });
   const { toast } = useToast();
-  
+
   function showToast(msg: string) {
     toast({
       variant: "destructive",
-      title: "Login error",
+      title: "Error",
       description: msg,
       action: <ToastAction altText="Réessayer">Réessayer</ToastAction>,
     });
   }
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -82,7 +83,7 @@ export default function ReservationsCreatePage() {
 
   const [comptes, setComptes] = useState<Account[]>([]);
   useEffect(() => {
-    setLoading(true);
+    // setLoadingComptes(true);
     const fetchaccounts = async () => {
       try {
         const response = await fetch(
@@ -106,11 +107,11 @@ export default function ReservationsCreatePage() {
 
         if (data.myaccounts) {
           setComptes(data.myaccounts); // Update state with fetched data
-          // setLoading(false);
+          // setLoadingComptes(false);
         }
       } catch (error) {
         console.error("Error fetching comptes:", error);
-        // setLoading(false);
+        // setLoadingComptes(false);
       }
     };
     fetchaccounts();
@@ -118,12 +119,12 @@ export default function ReservationsCreatePage() {
 
   const [utilisateurs, setUtilisateurs] = useState<User[]>([]);
   useEffect(() => {
-    setLoading(true);
+    setLoadingUtilisateurs(true);
     // setError(null);
     const fetchusers = async () => {
       try {
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/users`,
+          `http://xapi.vengoreserve.com/api/view/users?account_id=${accountId}`,
           {
             method: "GET",
             headers: {
@@ -141,29 +142,29 @@ export default function ReservationsCreatePage() {
         if (data.my_items) {
           setUtilisateurs(data.my_items); // Update state with fetched data
           // setError(null);
-          setLoading(false);
+          setLoadingUtilisateurs(false);
         }
       } catch (error) {
         console.error("Error fetching users:", error);
         // setError("Failed to load users. Please try again later.");
-        // setLoading(false);
+        // setLoadingUtilisateurs(false);
       }
     };
 
     fetchusers();
-  }, [token]);
+  }, [token, accountId]);
 
   const [reservationsTypes, setReservationsTypes] = useState<
     ReservationsType[]
   >([]);
   useEffect(() => {
-    setLoading(true);
+    // setLoadingReservationsTypes(true);
     // setError(null);
 
     const fetchaccounts = async () => {
       try {
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/reservations-types`,
+          `http://xapi.vengoreserve.com/api/view/reservations-types?account_id=${accountId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -181,27 +182,27 @@ export default function ReservationsCreatePage() {
         if (data.my_items) {
           setReservationsTypes(data.my_items); // Update state with fetched data
           // setError(null);
-          // setLoading(false);
+          // setLoadingReservationsTypes(false);
         }
       } catch (error) {
         console.error("Error fetching reservationsTypes:", error);
         // setError("Failed to load reservationsTypes. Please try again later.");
-        // setLoading(false);
+        // setLoadingReservationsTypes(false);
       }
     };
 
     fetchaccounts();
-  }, [token]);
+  }, [token, accountId]);
 
   const [vehicles, setVehicles] = useState<Vehicules[]>([]);
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     // setError(null);
 
     const fetchvehicles = async () => {
       try {
         const response = await fetch(
-          `http://xapi.vengoreserve.com/api/view/vehicles`,
+          `http://xapi.vengoreserve.com/api/view/vehicles?account_id=${accountId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -228,7 +229,7 @@ export default function ReservationsCreatePage() {
     };
 
     fetchvehicles();
-  }, [token]);
+  }, [token, accountId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -239,6 +240,10 @@ export default function ReservationsCreatePage() {
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: parseInt(value) }));
+
+    if (name === "account_id") {
+      setAccountId(value);
+    }
   };
 
   const handleDateChange = (name: string, value: string) => {
@@ -252,10 +257,10 @@ export default function ReservationsCreatePage() {
   const handleSelectUser = (userId: number) => {
     setFormData((prev) => ({
       ...prev,
-      user_ids: prev.user_ids ? [...prev.user_ids, userId] : [userId]
+      user_ids: prev.user_ids ? [...prev.user_ids, userId] : [userId],
     }));
   };
-  
+
   // ===========================================================
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]); // Array of User type
@@ -296,31 +301,30 @@ export default function ReservationsCreatePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.account_id) {
-      notifyErreur("Veuillez sélectionner un compte.");
       showToast("Veuillez sélectionner un compte.");
       return false;
     }
-    
-    if (!formData.reservationstypes_id) {
-      notifyErreur("Veuillez sélectionner un type de réservation.");
-      return false;
-    }
-  
+
+    // if (!formData.reservationstypes_id) {
+    //   showToast("Veuillez sélectionner un type de réservation.");
+    //   return false;
+    // }
+
     // if (!formData.vehicle_id) {
     //   notifyErreur("Veuillez sélectionner un véhicule.");
     //   return false;
     // }
-  
+
     // if (!formData.date_start) {
     //   notifyErreur("Veuillez sélectionner une date de début.");
     //   return false;
     // }
-  
+
     // if (!formData.date_end) {
     //   notifyErreur("Veuillez sélectionner une date de fin.");
     //   return false;
     // }
-  
+
     // if (!formData.description.trim()) {
     //   notifyErreur("Veuillez entrer une description.");
     //   return false;
@@ -359,13 +363,13 @@ export default function ReservationsCreatePage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col max-h-screen ">
@@ -393,13 +397,13 @@ export default function ReservationsCreatePage() {
             <h1 className="text-2xl font-bold mb-4">Créer Réservation</h1>
 
             {/* Ligne pour les sélections */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 p-4">
               <div className="flex-1">
                 <label
                   htmlFor="account_id"
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium mb-1 text-blue-500"
                 >
-                  Compte
+                  * Compte
                 </label>
                 <Select
                   onValueChange={(value) =>
@@ -486,19 +490,20 @@ export default function ReservationsCreatePage() {
                   className="flex-grow"
                   id="selectionnez"
                 />
-                {/* <Button
-                  onClick={handleSearch}
-                  className="bg-black text-white w-full sm:w-auto"
-                >
-                  Search
-                </Button> */}
               </div>
 
               <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
                 <div className="w-full sm:w-1/2 border rounded-md p-2">
                   <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-semibold">Résultats de la recherche :</h2>
-                    <Button variant="ghost" size="sm" onClick={toggleResults}>
+                    <h2 className="font-semibold">
+                      Résultats de la recherche :
+                    </h2>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={toggleResults}
+                      type="button"
+                    >
                       {showResults ? (
                         <ChevronUp className="h-4 w-4" />
                       ) : (
@@ -507,38 +512,45 @@ export default function ReservationsCreatePage() {
                       {showResults ? "Hide" : "Show"}
                     </Button>
                   </div>
-                  {showResults && (
-                    <div className="max-h-60 overflow-y-auto">
-                      <ul className="space-y-1">
-                        {searchResults.map((user) => (
-                          <li
-                            key={user.id}
-                            className="flex justify-between items-center"
-                          >
-                            <span>{user.username}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => addUser(user)}
+                  {loadingUtilisateurs ? (
+                    <Loader />
+                  ) : (
+                    showResults && (
+                      <div className="max-h-60 overflow-y-auto">
+                        <ul className="space-y-1">
+                          {searchResults.map((user) => (
+                            <li
+                              key={user.id}
+                              className="flex justify-between items-center"
                             >
-                              <Plus size={12}/>
-                            </Button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                              <span>{user.username}</span>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => addUser(user)}
+                              >
+                                <Plus size={12} />
+                              </Button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
                   )}
                 </div>
 
                 <div className="w-full sm:w-1/2 border rounded-md p-2">
                   <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-semibold">Utilisateurs sélectionnés :</h2>
+                    <h2 className="font-semibold">
+                      Utilisateurs sélectionnés :
+                    </h2>
                     <Button
+                      type="button"
                       variant="destructive"
                       size="sm"
                       onClick={clearAllUsers}
                     >
-                      <Trash size={16}/>
+                      <Trash size={16} />
                     </Button>
                   </div>
                   <div className="max-h-60 overflow-y-auto">
@@ -564,7 +576,7 @@ export default function ReservationsCreatePage() {
               </div>
             </div>
             {/* Dates sur une ligne */}
-            <div className="flex flex-wrap gap-4 mt-4">
+            <div className="flex flex-wrap gap-4 mt-4 p-4">
               {/* Date avant Début */}
               <div className="flex-1">
                 <label
@@ -659,7 +671,7 @@ export default function ReservationsCreatePage() {
             </div>
 
             {/* Description en bas */}
-            <div className="mt-4">
+            <div className="mt-4 p-4">
               <label
                 htmlFor="description"
                 className="block text-sm font-medium mb-1"
@@ -678,7 +690,7 @@ export default function ReservationsCreatePage() {
             {/* Bouton de soumission */}
             <Button
               type="submit"
-              className="w-full mt-4 text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-50"
+              className="w-full mt-4 mx-4 text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-50"
               disabled={submitting}
             >
               {submitting ? (
