@@ -29,6 +29,9 @@ const ReservationsPage = lazy(
 const ReservationsCreatePage = lazy(
   () => import("./pages/reservations/ReservationsCreatePage")
 );
+const ReservationsPlanifierPage = lazy(
+  () => import("./pages/reservations/ReservationsPlanifierPage")
+);
 const TypesDesReservationsPage = lazy(
   () => import("./pages/types des reservations/TypesDesReservationsPage")
 );
@@ -157,6 +160,14 @@ const App = () => {
             element={
               <Suspense fallback={<div>Chargement...</div>}>
                 <ReservationsCreatePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/reservations/planifier"
+            element={
+              <Suspense fallback={<div>Chargement...</div>}>
+                <ReservationsPlanifierPage />
               </Suspense>
             }
           />

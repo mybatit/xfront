@@ -59,7 +59,7 @@ interface Reservations {
   reservationstypes_id: number;
   account_id: number;
   date_creation: string; // ISO date string
-  date_submit: string | null; 
+  date_submit: string | null;
   date_validation: string | null;
   date_solde: string | null;
   created_by: number;
@@ -89,7 +89,6 @@ interface Reservations {
   pickup: string | null;
   dropoff: string | null;
 }
-
 
 const columns: ColumnDef<Reservations>[] = [
   {
@@ -190,7 +189,9 @@ const columns: ColumnDef<Reservations>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Eye className="mr-2 h-4 w-4" />
-              Voir les détails
+              <Link to={`/reservations/details/${reservation.id}`}>
+                Voir les détails
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Trash2 className="mr-2 h-4 w-4" />
@@ -343,11 +344,15 @@ const ReservationsPage = () => {
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
           <Link to="/reservations/create">
-            <Button className="w-full" variant="outline">
+            <Button className="w-full mb-2" variant="outline">
               Nouveau
             </Button>
           </Link>
-
+          <Link to="/reservations/planifier">
+            <Button className="w-full" variant="outline">
+              planifier
+            </Button>
+          </Link>
           <div>
             <h3 className="mb-2 font-medium">Export</h3>
             <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">
